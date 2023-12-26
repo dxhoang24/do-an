@@ -1,6 +1,6 @@
 var express = require("express")
-var contacts = require("../models/contact.models")
-const userModel = require("../models/user.model")
+var contacts = require("../models/contact")
+const userModel = require("../models/user")
 var client = express.Router()
 
 client.get("/client",(req,res)=>{

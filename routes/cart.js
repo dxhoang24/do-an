@@ -2,7 +2,7 @@ var express = require("express");
 var cart = express.Router();
 var GioHang = require("../models/giohang.js");
 var Cart = require("../models/Cart.js");
-var products = require("../models/products.model.js");
+var products = require("../models/products.js");
 var countJson = function (json) {
   var count = 0;
   for (var id in json) {

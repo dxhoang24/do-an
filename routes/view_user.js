@@ -1,6 +1,6 @@
 var express = require("express");
 var view_user = express.Router();
-var userModel = require("../models/user.model.js");
+var userModel = require("../models/user.js");
 
 view_user.get("/view_user",(req,res)=>{
     if(req.session.loggin){

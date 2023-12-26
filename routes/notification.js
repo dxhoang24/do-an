@@ -1,6 +1,6 @@
 var express = require("express")
 var notifi = express.Router()
-var contacts = require("../models/contact.models")
+var contacts = require("../models/contact")
 notifi.get("/admin/notification",(req,res)=>{
   if(req.session.loggin){
       user = req.user

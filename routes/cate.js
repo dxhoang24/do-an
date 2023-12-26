@@ -2,7 +2,7 @@ const e = require("express");
 var express = require("express")
 var cate = express.Router()
 var cates = require("../models/Cate.js");
-var products = require("../models/products.model.js");
+var products = require("../models/products.js");
 cate.get("/icate",(req,res)=>{
   
     res.render("admin/insert_cate")
