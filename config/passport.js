@@ -3,7 +3,7 @@
 var passport = require('passport');
 var jwt = require("jsonwebtoken");
 // load  user model
-var User = require('../models/user.model');
+var User = require('../models/user');
 var LocalStrategy = require('passport-local').Strategy;
 
 // passport session setup

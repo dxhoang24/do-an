@@ -2,8 +2,8 @@ var express = require('express');
 var router = express.Router();
 const { check, validationResult } = require('express-validator');
 var  passport = require('passport');
-const userModel = require('../models/user.model');
-const products = require('../models/products.model');
+const userModel = require('../models/user');
+const products = require('../models/products');
 /* GET home page. */
 router.get('/home', function(req,res,next){
   if(req.session.loggin){

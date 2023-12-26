@@ -1,6 +1,6 @@
 var express = require("express")
-const products = require("../models/products.model")
-const comments = require("../models/comment.models");
+const products = require("../models/products")
+const comments = require("../models/comment");
 
 var detail_product = express.Router();
 

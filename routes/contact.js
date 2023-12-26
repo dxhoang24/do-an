@@ -1,5 +1,5 @@
 var express = require("express")
-var contacts = require("../models/contact.models")
+var contacts = require("../models/contact")
 var contact = express.Router()
 
 contact.get("/contact",(req,res)=>{

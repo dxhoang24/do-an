@@ -1,6 +1,6 @@
 var express = require("express");
 var product = express.Router();
-const products = require("../models/products.model");
+const products = require("../models/products.js");
 var multer = require("multer");
 const { response } = require("express");
 var cates = require("../models/Cate.js");

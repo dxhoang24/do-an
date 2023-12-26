@@ -1,17 +1,17 @@
 require('dotenv').config()
-var createError = require('http-errors');
 var express = require('express');
 var app = express();
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var session = require('express-session')
-var logger = require('morgan');
-var ejs = require("ejs");
-var LocalStrategy = require("passport-local");
 var passport = require('passport');
 var flash = require('connect-flash');
-var jwt =require("jsonwebtoken");
+require('colors');
 
+global._ = require('underscore');
+global._moment = require('moment');
+global.fsx = require('fs.extra');
+global.path = require('path');
 // link router
 var cate = require("./routes/cate.js");
 var view_user = require("./routes/view_user.js");
@@ -26,7 +26,7 @@ var about = require('./routes/about.js');
 var contact = require('./routes/contact.js');
 
 //Link models
-var products = require("./models/products.model");
+var products = require("./models/products.js");
 
 // kết nối database
 var config = require('./config/database.js');
@@ -102,7 +102,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+global._rootPath = path.dirname(require.main.filename);
+require(path.join(_rootPath, 'libs', 'router.js'))(app);
 //get router
 app.use("/", detail_notifi);
 app.use("/", notifi);
@@ -117,5 +118,6 @@ app.use("/", cate);
 app.use("/", detail_product);
 // catch 404 and forward to error handler
 
-app.listen(process.env.PORT || 4000)
+app.listen(process.env.PORT || 4000);
+console.log(("Server is running at " + process.env.PORT || 4000).magenta);
 

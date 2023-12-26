@@ -1,6 +1,6 @@
 var express = require("express");
 var detail_notifi = express.Router()
-const contacts = require("../models/contact.models")
+const contacts = require("../models/contact")
 
 detail_notifi.get("/detail-notification/:id",(req,res)=>{
   
