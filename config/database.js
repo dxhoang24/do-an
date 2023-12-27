@@ -1,4 +1,4 @@
 module.exports = {
-    'url' : 'mongodb://127.0.0.1/test'
-    // 'url' : 'mongodb+srv://sonnt:MSSVpd02723@cluster0.4nteg.mongodb.net/BanHang?retryWrites=true&w=majority'
+    // 'url' : 'mongodb://172.16.89.196/do-an'
+    'url' : 'mongodb+srv://hoangdaodxh:hoangdaodxh@cluster0.scd0yyo.mongodb.net/BanHang'
 };
