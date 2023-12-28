@@ -20,49 +20,42 @@
 
       <div class="row" style="margin-left: -5%" >
         
-          <% danhsach.forEach(function(product){ %>
-          <div class="col-sm-3">
-                    <div class="thumbnail" >
-                      <img
+          
+            <table>
+              <thead class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <th>Tên</th>
+                <th>Hình ảnh</th>
+                <th>Mô tả</th>
+                <th>Số lượng</th>
+                <th>Đơn giá</th>
+                <th>
+                  <i class="fas fa-pen"></i>
+                </th>
+              </thead>
+              <tbody>
+                <% danhsach.forEach(function(product){ %>
+                <tr class="text-center">
+                  <td><%- product.name %></td>
+                  <td>
+                    <img
                         class=""
                         src="/upload/<%- product.image %>"
-                        alt="Sản phẩm 8"
-                        
-                        style="padding-right: 6%; width: 100%; height: 200px;"
+                        alt="<%- product.name %>"
+                        style="padding-right: 6%; width: 80px; height: 80px;"
                       />
-                      <div class="caption">
-                        <h4 class="">
-                          <%- product.name %>
-                        </h4>
-                        <p
-                          class=""
-                          style="
-                            white-space: nowrap;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                          "
-                        >
-                          <%- product.note %>
-                        </p>
-                       
-                          <div class="">
-                            <p class="lead"><%- product.price %> VNĐ</p>
-                          </div>
-                          <div style="margin-bottom: 5%;"> 
-                            <a class="btn btn-success" href="/admin/edit-product/<%- product._id %>">
-                           Cập nhật</a> 
-                    
-                           <a class="btn btn-success" href="/delete-product/<%- product._id %>">
-                          Xoá</a> 
-                       </div>
-                  
-                      </div>
-                    </div>
-              
-               
-                </div> 
+                  </td>
+                  <td><%- product.note %></td>
+                  <td><%- product.quantity %></td>
+                  <td><%- product.price %></td>
+                  <td>
+                    <a href="/delete-product/<%- product._id %>">Xóa </a>
+                      |
+                    <a href="/admin/edit-product/<%- product._id %>">Sửa </a>    
+                  </td>
+                </tr>
                 <% }); %>
-          </div>
+              </tbody>
+            </table>
           
           
       </div>
