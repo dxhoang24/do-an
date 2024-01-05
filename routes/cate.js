@@ -72,28 +72,26 @@ cate.post("/updatecate", (req, res) => {
   );
 });
 cate.get("/cate/:id", (req, res) => {
-    let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
-    let page = req.params.page || 1;
+  let perPage = 8; // số lượng sản phẩm xuất hiện trên 1 page
+  let page = req.params.page || 1;
 
-    products
-        .find({ cateID: req.params.id }) // find tất cả các data
-        .sort({ date: "descending" })
-        .skip(perPage * page - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
-        .limit(perPage)
-        .exec((err, data) => {
-        products.countDocuments((err, count) => {
-            console.log("dataaaa",data);
-            // đếm để tính có bao nhiêu trang
-            if (err) return next(err);
-            res.render("user/view_cate", {
-            danhsach: data,
-            message : "Xóa thành công",
-            current: page, // page hiện tại
-            pages: Math.ceil(count / perPage),
-            }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
-        });
-        });
-
+  products
+    .find({ cateID: req.params.id }) // find tất cả các data
+    .sort({ date: "descending" })
+    .skip(perPage * page - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
+    .limit(perPage)
+    .exec((err, data) => {
+      products.countDocuments((err, count) => {
+        // đếm để tính có bao nhiêu trang
+        if (err) return next(err);
+        res.render("user/view_cate", {
+          danhsach: data,
+          message: "Xóa thành công",
+          current: page, // page hiện tại
+          pages: Math.ceil(count / perPage),
+        }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
+      });
+    });
 });
 cate.get("/delete_cate/:id", (req, res) => {
   if (req.session.loggin) {

@@ -118,6 +118,6 @@ app.use("/", cate);
 app.use("/", detail_product);
 // catch 404 and forward to error handler
 
-app.listen(process.env.PORT || 4000);
-console.log(("Server is running at " + process.env.PORT || 4000).magenta);
+app.listen(process.env.PORT || 5000);
+console.log(("Server is running at " + process.env.PORT || 5000).magenta);
 
