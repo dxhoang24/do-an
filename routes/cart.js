@@ -22,7 +22,7 @@ cart.get("/shopping-cart", function (req, res) {
     req.session.cart ? req.session.cart : { items: {} }
   );
   var data = giohang.convertArray();
-
+  console.log("dataaaa",data);
   res.render("user/cart", { data: data });
 });
 
@@ -44,6 +44,7 @@ cart.get("/order", function (req, res) {
   var giohang = new GioHang(
     req.session.cart ? req.session.cart : { items: {} }
   );
+
   //var data = giohang.convertArray();
 
   if (req.session.cart) {
