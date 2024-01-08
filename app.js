@@ -1,10 +1,11 @@
 require('dotenv').config()
 var express = require('express');
-var app = express();
+var bodyParser = require('body-parser');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var session = require('express-session')
 var passport = require('passport');
+require('mongoose-pagination');
 var flash = require('connect-flash');
 require('colors');
 
@@ -12,6 +13,23 @@ global._ = require('underscore');
 global._moment = require('moment');
 global.fsx = require('fs.extra');
 global.path = require('path');
+global.__basedir = __dirname;
+global._request = require('request');
+global._rootPath = path.dirname(require.main.filename);
+global._libsPath = path.normalize(path.join(__dirname, 'libs'));
+
+const dotenv = require('dotenv')
+dotenv.config()
+
+global.moment = global._moment;
+global._async = require('async');
+global.mongoose = require('mongoose');
+global.mongodb = require('mongodb');
+global.pagination = require('pagination');
+
+require(path.join(__dirname, 'libs', 'resource'));
+
+var app = express();
 // link router
 var cate = require("./routes/cate.js");
 var view_user = require("./routes/view_user.js");
@@ -96,13 +114,16 @@ app.get('/', function(req,res){
     });
 }
 })
-
-// app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.set('view cache', false);
+app.set('port', process.env.PORT || _config.app.port);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-global._rootPath = path.dirname(require.main.filename);
+app.use(require('cookie-parser')('dft.vn'));
+app.use(require('express-session')({ secret: 'dft.vn', resave: false, saveUninitialized: true }));
+app.use(require('multer')({ dest: path.join(__dirname, 'temp') }).any());
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
 require(path.join(_rootPath, 'libs', 'router.js'))(app);
 //get router
 app.use("/", detail_notifi);
@@ -116,8 +137,23 @@ app.use("/", view_user);
 app.use("/", product);
 app.use("/", cate);
 app.use("/", detail_product);
-// catch 404 and forward to error handler
 
-app.listen(process.env.PORT || 4000);
-console.log(("Server is running at " + process.env.PORT || 4000).magenta);
+app.use(function (req, res, next) {
+  res.render('404', { title: '404 | Page not found' });
+});
 
+app.use(function (err, req, res, next) {
+  res.status(err.status || 500);
+  res.render('500', { message: err.message });
+});
+
+var handleOnServerStart = function () {
+  console.log(("Server is running at " + app.get('port')).magenta);
+};
+
+var server = app.listen(app.get('port'), handleOnServerStart);
+
+// global.sio = require('socket.io').listen(server, { log: false });
+// sio.on('connection', function (socket) {
+//     require(path.join(_rootPath, 'socket', 'io.js'))(socket);
+// });

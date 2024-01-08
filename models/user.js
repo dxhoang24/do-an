@@ -19,5 +19,6 @@ schema.methods.validPassword = function(password){
     return bcrypt.compareSync(password, this.password);
 };
 
-
+schema.plugin(require('mongoose-aggregate-paginate'));
+schema.set('toJSON', { getters: true });
 module.exports = mongoose.model('User', schema);
