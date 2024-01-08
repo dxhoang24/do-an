@@ -33,109 +33,107 @@ var upload = multer({
 }).single("image");
 
 product.get("/product", (req, res) => {
-
-  if(req.session.loggin){
-    user = req.user
-
-
-  let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
-  let page = req.params.page || 1;
-  cates.find().then(function(data){
-    item = data
-  
-  products
-    .find() // find tất cả các data
-    .sort({ date: "descending" })
-    .skip(perPage * page - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
-    .limit(perPage)
-    .exec((err, data) => {
-      products.countDocuments((err, count) => {
-        // đếm để tính có bao nhiêu trang
-        if (err) return next(err);
-        res.render("user/product", {
-          danhsach: data,
-          current: page, // page hiện tại
-          pages: Math.ceil(count / perPage),
-        }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
-      });
-    });
-  });
-}else{
-  user = null;
-  
-  let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
-  let page = req.params.page || 1;
-  cates.find().then(function(data){
-    item = data
-  
-  products
-    .find() // find tất cả các data
-    .sort({ date: "descending" })
-    .skip(perPage * page - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
-    .limit(perPage)
-    .exec((err, data) => {
-      products.countDocuments((err, count) => {
-        // đếm để tính có bao nhiêu trang
-        if (err) return next(err);
-        res.render("user/product", {
-          danhsach: data,
-          current: page, // page hiện tại
-          pages: Math.ceil(count / perPage),
-        }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
-      });
-    });
-  });
-}
-});
-product.get("/product/:page", (req, res) => {
-  if(req.session.loggin){
+  if (req.session.loggin) {
     user = req.user;
 
-  let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
-  let page = req.params.page || 1;
-  cates.find().then(function(data){
-    item = data
-  products
-    .find() // find tất cả các data
-    .sort({ date: "descending" })
-    .skip(perPage * page - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
-    .limit(perPage)
-    .exec((err, data) => {
-      products.countDocuments((err, count) => {
-        // đếm để tính có bao nhiêu trang
-        if (err) return next(err);
-        res.render("user/product", {
-          danhsach: data,
-          current: page, // page hiện tại
-          pages: Math.ceil(count / perPage),
-        }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
-      });
+    let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
+    let page = req.params.page || 1;
+    cates.find().then(function (data) {
+      item = data;
+
+      products
+        .find() // find tất cả các data
+        .sort({ date: "descending" })
+        .skip(perPage * page - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
+        .limit(perPage)
+        .exec((err, data) => {
+          products.countDocuments((err, count) => {
+            // đếm để tính có bao nhiêu trang
+            if (err) return next(err);
+            res.render("user/product", {
+              danhsach: data,
+              current: page, // page hiện tại
+              pages: Math.ceil(count / perPage),
+            }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
+          });
+        });
     });
-  });
-}else{
-  user = null;
-  let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
-  let page = req.params.page || 1;
-  cates.find().then(function(data){
-    item = data
-  products
-    .find() // find tất cả các data
-    .sort({ date: "descending" })
-    .skip(perPage * page - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
-    .limit(perPage)
-    .exec((err, data) => {
-      products.countDocuments((err, count) => {
-        // đếm để tính có bao nhiêu trang
-        if (err) return next(err);
-        res.render("user/product", {
-          danhsach: data,
-          current: page, // page hiện tại
-          pages: Math.ceil(count / perPage),
-        }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
-      });
+  } else {
+    user = null;
+
+    let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
+    let page = req.params.page || 1;
+    cates.find().then(function (data) {
+      item = data;
+
+      products
+        .find() // find tất cả các data
+        .sort({ date: "descending" })
+        .skip(perPage * page - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
+        .limit(perPage)
+        .exec((err, data) => {
+          products.countDocuments((err, count) => {
+            // đếm để tính có bao nhiêu trang
+            if (err) return next(err);
+            res.render("user/product", {
+              danhsach: data,
+              current: page, // page hiện tại
+              pages: Math.ceil(count / perPage),
+            }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
+          });
+        });
     });
-  });
-}
+  }
+});
+product.get("/product/:page", (req, res) => {
+  if (req.session.loggin) {
+    user = req.user;
+
+    let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
+    let page = req.params.page || 1;
+    cates.find().then(function (data) {
+      item = data;
+      products
+        .find() // find tất cả các data
+        .sort({ date: "descending" })
+        .skip(perPage * page - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
+        .limit(perPage)
+        .exec((err, data) => {
+          products.countDocuments((err, count) => {
+            // đếm để tính có bao nhiêu trang
+            if (err) return next(err);
+            res.render("user/product", {
+              danhsach: data,
+              current: page, // page hiện tại
+              pages: Math.ceil(count / perPage),
+            }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
+          });
+        });
+    });
+  } else {
+    user = null;
+    let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
+    let page = req.params.page || 1;
+    cates.find().then(function (data) {
+      item = data;
+      products
+        .find() // find tất cả các data
+        .sort({ date: "descending" })
+        .skip(perPage * page - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
+        .limit(perPage)
+        .exec((err, data) => {
+          products.countDocuments((err, count) => {
+            // đếm để tính có bao nhiêu trang
+            if (err) return next(err);
+            res.render("user/product", {
+              danhsach: data,
+              current: page, // page hiện tại
+              pages: Math.ceil(count / perPage),
+            }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
+          });
+        });
+    });
+  }
 });
 
 product.get("/admin/list-product", (req, res) => {
@@ -154,7 +152,7 @@ product.get("/admin/list-product", (req, res) => {
           products.countDocuments((err, count) => {
             // đếm để tính có bao nhiêu trang
             if (err) return next(err);
-            
+
             res.render("admin/list-product", {
               danhsach: data,
               message: message,
@@ -188,7 +186,7 @@ product.get("/admin/list-product/:page", (req, res) => {
             if (err) return next(err);
             res.render("admin/list-product", {
               danhsach: data,
-              message : message,
+              message: message,
               current: page, // page hiện tại
               pages: Math.ceil(count / perPage),
             }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
@@ -237,7 +235,7 @@ product.post("/insert", (req, res) => {
         image: req.file.filename,
         name: req.body.name,
         cateID: req.body.cateID,
-    
+
         quantity: req.body.quantity,
         note: req.body.note,
 
@@ -259,16 +257,16 @@ product.get("/admin/edit-product/:id", (req, res) => {
     user = req.user;
     if (user.role == "admin") {
       var message = req.flash("error");
-      cates.find().then(function(data){
-        item = data
-     
-      products.findById(req.params.id, function (err, data) {
-        res.render("admin/edit-product", {
-          danhsach: data,
-          message: message,
-          hasErrors: message.length > 0,
+      cates.find().then(function (data) {
+        item = data;
+
+        products.findById(req.params.id, function (err, data) {
+          res.render("admin/edit-product", {
+            danhsach: data,
+            message: message,
+            hasErrors: message.length > 0,
+          });
         });
-      });
       });
     } else {
       res.redirect("/home");
@@ -300,7 +298,7 @@ product.post("/edit-product", (req, res) => {
               } else {
                 let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
                 let page = req.params.page || 1;
-            
+
                 products
                   .find() // find tất cả các data
                   .sort({ date: "descending" })
@@ -312,7 +310,7 @@ product.post("/edit-product", (req, res) => {
                       if (err) return next(err);
                       res.render("admin/list-product", {
                         danhsach: data,
-                        message : "Cập nhật thành công",
+                        message: "Cập nhật thành công",
                         current: page, // page hiện tại
                         pages: Math.ceil(count / perPage),
                       }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
@@ -342,7 +340,7 @@ product.post("/edit-product", (req, res) => {
                 } else {
                   let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
                   let page = req.params.page || 1;
-              
+
                   products
                     .find() // find tất cả các data
                     .sort({ date: "descending" })
@@ -354,7 +352,7 @@ product.post("/edit-product", (req, res) => {
                         if (err) return next(err);
                         res.render("admin/list-product", {
                           danhsach: data,
-                          message : "Cập nhật thành công",
+                          message: "Cập nhật thành công",
                           current: page, // page hiện tại
                           pages: Math.ceil(count / perPage),
                         }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
@@ -381,7 +379,7 @@ product.get("/delete-product/:id", (req, res) => {
       } else {
         let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
         let page = req.params.page || 1;
-    
+
         products
           .find() // find tất cả các data
           .sort({ date: "descending" })
@@ -393,7 +391,7 @@ product.get("/delete-product/:id", (req, res) => {
               if (err) return next(err);
               res.render("admin/list-product", {
                 danhsach: data,
-                message : "Xóa thành công",
+                message: "Xóa thành công",
                 current: page, // page hiện tại
                 pages: Math.ceil(count / perPage),
               }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
@@ -410,51 +408,52 @@ product.post("/Search", (req, res) => {
   if (req.session.loggin) {
     user = req.user;
     if (user.role == "admin") {
-      let name = req.body.name;
-      cates.find().then(function(data){
-        item = data
-      
-      products
-        .find({
-          name: { $regex: name },
-        })
-        .limit(12)
-        .then((data) => {
-          res.render("admin/Search_product", {
-            danhsach: data,
+      let name = new RegExp(_.stringRegex(req.body.name), "i");
+      cates.find().then(function (data) {
+        item = data;
+
+        products
+          .find({
+            name: name,
+          })
+          .limit(12)
+          .then((data) => {
+            res.render("admin/Search_product", {
+              danhsach: data,
+            });
+            // console.log(data)
+          })
+          .catch((err) => {
+            console.log(err);
           });
-          // console.log(data)
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      })
+      });
     } else {
-      let name = req.body.name;
-      cates.find().then(function(data){
-        item = data
-      
-      products
-        .find({
-          name: { $regex: name },
-        })
-        .limit(12)
-        .then((data) => {
-          res.render("user/Search_product", {
-            danhsach: data,
+      let name = new RegExp(_.stringRegex(req.body.name), "i");
+
+      cates.find().then(function (data) {
+        item = data;
+
+        products
+          .find({
+            name: name,
+          })
+          .limit(12)
+          .then((data) => {
+            res.render("user/Search_product", {
+              danhsach: data,
+            });
+            // console.log(data)
+          })
+          .catch((err) => {
+            console.log(err);
           });
-          // console.log(data)
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      })
+      });
     }
-  }else{
+  } else {
     let name = req.body.name;
-    cates.find().then(function(data){
-      item = data
-    
+    cates.find().then(function (data) {
+      item = data;
+
       products
         .find({
           name: { $regex: name },
@@ -470,8 +469,7 @@ product.post("/Search", (req, res) => {
           console.log(err);
         });
     });
-    }
-  
+  }
 });
 
 module.exports = product;

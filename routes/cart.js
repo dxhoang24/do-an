@@ -13,9 +13,9 @@ var countJson = function (json) {
 };
 
 cart.get("/shopping-cart", function (req, res) {
-  if(req.session.loggin){
+  if (req.session.loggin) {
     user = req.user;
-  }else{
+  } else {
     user = null;
   }
   var giohang = new GioHang(
@@ -94,19 +94,20 @@ cart.post("/delCart", function (req, res) {
   res.json({ st: 1 });
 });
 cart.get("/list_order", (req, res) => {
-  if(req.session.loggin){
-    user = req.user
-    if(user.role == "admin"){
-      Cart.find().sort({date: "ascending"}).then(function (data) {
-        res.render("admin/list-order", { data: data });
-      });
-    }else{
-      res.redirect("/")
+  if (req.session.loggin) {
+    user = req.user;
+    if (user.role == "admin") {
+      Cart.find()
+        .sort({ date: "ascending" })
+        .then(function (data) {
+          res.render("admin/list-order", { data: data });
+        });
+    } else {
+      res.redirect("/");
     }
-  }else{
-    res.redirect("/")
+  } else {
+    res.redirect("/");
   }
- 
 });
 cart.get("/view/:id", (req, res) => {
   var id = req.params.id;
@@ -115,14 +116,13 @@ cart.get("/view/:id", (req, res) => {
     res.render("admin/view-order", { cart: data });
   });
 });
-cart.get('/xacnhan/:id', function(req, res, next) {
+cart.get("/xacnhan/:id", function (req, res, next) {
   var id = req.params.id;
-  Cart.findById(id, function(err, data){
+  Cart.findById(id, function (err, data) {
     data.st = 1;
     data.save();
-    req.flash('success_msg', 'Đã Thêm Thành Công');
+    req.flash("success_msg", "Đã Thêm Thành Công");
     res.render("admin/view-order", { cart: data });
-    
   });
 });
 cart.post("/menu", function (req, res) {
@@ -142,8 +142,8 @@ cart.post("/menu", function (req, res) {
       msg: req.body.message,
       cart: data,
       st: 0,
-      
-      date: Date.now()
+
+      date: Date.now(),
     });
     console.log(cart);
     cart.save().then(function () {
@@ -152,27 +152,27 @@ cart.post("/menu", function (req, res) {
     });
   }
 });
-cart.get('/delete-order/:id', function(req, res) {
-	var id = req.params.id;
-	Cart.findOneAndRemove({_id: id}, function(err, offer){
-		if(err){
-console.log(err)
-		}else{
-		
-		req.flash('success_msg', 'Đã Xoa Thành Công');
-	   res.redirect('/checkout'); 
-	}});
+cart.get("/delete-order/:id", function (req, res) {
+  var id = req.params.id;
+  Cart.findOneAndRemove({ _id: id }, function (err, offer) {
+    if (err) {
+      console.log(err);
+    } else {
+      req.flash("success_msg", "Đã Xoa Thành Công");
+      res.redirect("/checkout");
+    }
+  });
 });
-cart.get('/xoa/:id', function(req, res) {
-	var id = req.params.id;
-	Cart.findOneAndRemove({_id: id}, function(err, offer){
-		if(err){
-console.log(err)
-		}else{
-		
-		req.flash('success_msg', 'Đã Xoa Thành Công');
-	   res.redirect('/list_order'); 
-	}});
+cart.get("/xoa/:id", function (req, res) {
+  var id = req.params.id;
+  Cart.findOneAndRemove({ _id: id }, function (err, offer) {
+    if (err) {
+      console.log(err);
+    } else {
+      req.flash("success_msg", "Đã Xoa Thành Công");
+      res.redirect("/list_order");
+    }
+  });
 });
 
 module.exports = cart;
