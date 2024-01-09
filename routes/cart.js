@@ -22,7 +22,6 @@ cart.get("/shopping-cart", function (req, res) {
     req.session.cart ? req.session.cart : { items: {} }
   );
   var data = giohang.convertArray();
-  console.log("dataaaa",data);
   res.render("user/cart", { data: data });
 });
 
@@ -85,7 +84,7 @@ cart.post("/updateCart", function (req, res) {
   res.json({ st: 1 });
 });
 cart.post("/delCart", function (req, res) {
-  var id = req.body.id;
+    var id = req.body.id;
   var giohang = new GioHang(
     req.session.cart ? req.session.cart : { items: {} }
   );
@@ -93,6 +92,15 @@ cart.post("/delCart", function (req, res) {
   giohang.delCart(id);
   req.session.cart = giohang;
   res.json({ st: 1 });
+});
+cart.get("/delCart2/:id", function (req, res) {
+  let id = req.params.id
+  var giohang = new GioHang(
+    req.session.cart ? req.session.cart : { items: {} }
+  );
+  giohang.delCart(id);
+  req.session.cart = giohang;
+  res.redirect("/shopping-cart");
 });
 cart.get("/list_order", (req, res) => {
   if (req.session.loggin) {
