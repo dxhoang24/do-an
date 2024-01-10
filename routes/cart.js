@@ -73,7 +73,7 @@ cart.get("/checkout", (req, res) => {
   }
 });
 cart.post("/updateCart", function (req, res) {
-  var id = req.body.id;
+    var id = req.body.id;
   var soluong = req.body.soluong;
   var giohang = new GioHang(
     req.session.cart ? req.session.cart : { items: {} }
@@ -82,6 +82,17 @@ cart.post("/updateCart", function (req, res) {
   giohang.updateCart(id, soluong);
   req.session.cart = giohang;
   res.json({ st: 1 });
+});
+
+cart.post("/updateCart2", function (req, res) {
+  let data = req.body
+  var giohang = new GioHang(
+    req.session.cart ? req.session.cart : { items: {} }
+  );
+  giohang.updateCart2(data);
+  req.session.cart = giohang;
+  res.json({ st: 1 });
+
 });
 cart.post("/delCart", function (req, res) {
     var id = req.body.id;

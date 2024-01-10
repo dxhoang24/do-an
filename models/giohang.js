@@ -31,6 +31,21 @@ function GioHang(oldCart) {
     this.TotalPrice += parseFloat(giohang.price);
     //console.log(giohang);
   };
+  this.updateCart2 = function (data) {
+    let total = 0
+    data.forEach(element => {
+      var giohang = this.items[element.item._id]
+      giohang.qty = element.qty;
+      giohang.price = element.price;
+      total += parseFloat(giohang.price);
+      this.TotalPrice= total
+    });
+    // var giohang = this.items[id];
+    // giohang.qty = qty;
+    // giohang.price = giohang.item.price * qty;
+    // this.TotalPrice += parseFloat(giohang.price);
+    //console.log(giohang);
+  };
 
   this.delCart = function (id) {
     delete this.items[id];

@@ -5,81 +5,81 @@
 
     <!------------------->
     <body>
-        <div class="container">
-          <h3>Giỏ hàng</h3>
-          <div class="row">
-            <table class="table table-striped table-bordered">
+      <div class="container">
+        <h3>Giỏ hàng</h3>
+        <div class="row">
+          <table class="table table-striped table-bordered">
+            <tr class="text-center">
+              <th>Ảnh</th>
+              <th>Tên sản phẩm</th>
+              <th>Đơn giá</th>
+              <th>Số lượng</th>
+              <th>Thành tiền</th>
+            </tr>
+            <% var total=0; if(data){ data.forEach(function(item, index){ total +=item.price %>
               <tr class="text-center">
-                <th>Ảnh</th>
-                <th>Tên sản phẩm</th>
-                <th>Đơn giá</th>
-                <th>Số lượng</th>
-                <th>Thành tiền</th>
-              </tr>
-              <% var total=0; if(data){ data.forEach(function(item, index){ total +=item.price %>
-                <tr class="text-center">
-                  <td><a
-                      href="/chi-tiet/<%= item.item.nameKhongDau%>.<%= item.item._id%>.<%= item.item.cateId%>.html"><img
-                        title="product" alt="product" src="/upload/<%= item.item.image%>" height="100" width="200"></a>
-                  </td>
-                  <td><a href="/chi-tiet/<%= item.item.nameKhongDau%>.<%= item.item._id%>.<%= item.item.cateId%>.html">
-                      <%= item.item.name%>
-                    </a></td>
-  
-                  <td>
-                    <%= item.item.price%> đ
-                  </td>
-  
-                  <td>
-                    <span>
-                      <input 
+                <td><a
+                    href="/chi-tiet/<%= item.item.nameKhongDau%>.<%= item.item._id%>.<%= item.item.cateId%>.html"><img
+                      title="product" alt="product" src="/upload/<%= item.item.image%>" height="100" width="200"></a>
+                </td>
+                <td><a href="/chi-tiet/<%= item.item.nameKhongDau%>.<%= item.item._id%>.<%= item.item.cateId%>.html">
+                    <%= item.item.name%>
+                  </a></td>
+
+                <td>
+                  <%= item.item.price%> đ
+                </td>
+
+                <td>
+                  <span>
+                    <input 
                         id="<%= item.item._id%>" 
                         type="number" size="1" 
-                        min="1" max="<%= item.item.quantity%>" 
-                        value="<%= item.qty%>" 
-                        oninput="checkMaxValue(this, '<%= index %>','<%= item %>')" 
-                        name="quantity[40]"
+                        min="1" max="<%= item.item.quantity%>"
+                      value="<%= item.qty%>" 
+                        oninput="checkMaxValue(this, '<%= index %>','<%= item %>')"
+                      name="quantity[40]"
                         class="span1">
-                    </span>
-                      <br>
-                    <span id="maxErrorMessage-<%= index%>" style="color: red; margin-top: 20px;"></span>
-                  </td>
-                  
-                  <td id="total-<%= index %>">
-                    <%= item.price%> đ
-                  </td>
-                  <td>                    
-                    <a href="/delCart2/<%= item.item._id %>" style="color: red;"> <i class="fas fa-times"></i></a>
-                  </td>
-                </tr>
+                  </span>
+                  <br>
+                  <span id="maxErrorMessage-<%= index%>" style="color: red; margin-top: 20px;"></span>
+                </td>
 
-                <%})}%>
+                <td id="total-<%= index %>">
+                  <%= item.price%> đ
+                </td>
+                <td>
+                  <a href="/delCart2/<%= item.item._id %>" style="color: red;"> <i class="fas fa-times"></i></a>
+                </td>
+              </tr>
+
+              <%})}%>
+          </table>
+        </div>
+        <div class="pull-right">
+          <div class="span4 pull-right">
+            <table class="table table-striped table-bordered ">
+              <td><span class="extra bold totalamout">Tổng tiền :</span></td>
+              <td><span class="bold totalamout" id="totalamout">
+                  <%= total%> đ
+                </span></td>
+              </tr>
             </table>
-          </div>
-          <div class="pull-right">
-            <div class="span4 pull-right">
-              <table class="table table-striped table-bordered ">
-                <td><span class="extra bold totalamout">Tổng tiền :</span></td>
-                <td><span class="bold totalamout" id="totalamout">
-                    <%= total%> đ
-                  </span></td>
-                </tr>
-              </table>
-              <a href="/order" class="btn btn-success" style="float: right; margin-left:10px">Đặt Hàng</a>
-              <a href="/product" class="btn btn-primary" style="float: right;">Mua thêm sản phẩm</a>
-          </div>
-            </div>
+            <a href="/order" class="btn btn-success" style="float: right; margin-left:10px" onclick="updateCart()">Đặt Hàng</a>
+            <a href="/product" class="btn btn-primary" style="float: right;" onclick="updateCart()">Mua thêm sản phẩm</a>
           </div>
         </div>
+      </div>
+
       <%- include("../layout/footer") %>
     </body>
 
     <script>
-      var data = JSON.parse(decodeURIComponent(`<%- encodeURIComponent(JSON.stringify(data)); %>`));
+      let data = JSON.parse(decodeURIComponent(`<%- encodeURIComponent(JSON.stringify(data)); %>`));
       function checkMaxValue(input, index, item) {
-        if(!input.value){
+        if (!input.value) {
           document.getElementById(`total-${index}`).textContent = '0 đ';
-        }else{
+        } else {
           var max = parseInt(input.max, 10);
           var value = parseInt(input.value, 10);
           if (value > max) {
@@ -87,14 +87,37 @@
           } else {
             document.getElementById(`maxErrorMessage-${index}`).textContent = "";
           }
-          document.getElementById(`total-${index}`).textContent = Number(data[index].item.price) * parseInt(input.value) + ' đ'|| 0 + ' đ';
+          document.getElementById(`total-${index}`).textContent = Number(data[index].item.price) * parseInt(input.value) + ' đ' || 0 + ' đ';
         }
         let total = 0;
         data.forEach((element, index2) => {
-          total += document.getElementById(`total-${index2}`).textContent && 
-                    parseInt(document.getElementById(`total-${index2}`).textContent.replace('đ', '')) || 
-                    0;
+          element.qty = (document.getElementById(`total-${index2}`).textContent &&
+            parseInt(document.getElementById(`total-${index2}`).textContent.replace('đ', '')) ||
+            0) / Number(element.item.price)
+          element.price = document.getElementById(`total-${index2}`).textContent &&
+            parseInt(document.getElementById(`total-${index2}`).textContent.replace('đ', '')) ||
+            0
+          total += document.getElementById(`total-${index2}`).textContent &&
+            parseInt(document.getElementById(`total-${index2}`).textContent.replace('đ', '')) ||
+            0;
         });
         document.getElementById('totalamout').textContent = total + ' đ'
+
       }
-   </script>
+      function updateCart() {
+        const requestData = data
+        // Sử dụng fetch để gọi API với phương thức POST
+        fetch('/updateCart2', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+            // Bạn cũng có thể thêm các header khác tùy theo yêu cầu của API
+          },
+          body: JSON.stringify(requestData)
+        })
+          .then(response => response.json())
+          .catch(error => {
+            console.error('Error calling API:', error);
+          });
+      }
+    </script>
