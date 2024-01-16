@@ -26,7 +26,7 @@
     "jsonwebtoken": "^8.5.1",
     "lingo": "^0.0.5",
     "methods": "^1.1.2",
-    "moment": "^2.29.4",
+    "moment": "^2.30.1",
     "mongoose": "^5.10.10",
     "mongoose-aggregate-paginate": "^2.0.2",
     "mongoose-pagination": "^1.0.0",
@@ -40,6 +40,7 @@
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^6.0.1",
     "request": "^2.88.2",
+    "sweetalert2": "^11.10.3",
     "underscore": "^1.13.6",
     "underscore.string": "^3.3.6"
   }

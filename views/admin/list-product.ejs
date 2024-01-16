@@ -1,6 +1,5 @@
 <%- include("../layout/head") %>
   <link rel="stylesheet" href="/css/body.css">
-
   <body>
     <div class="aside" style="border: none;">
       <%- include("../layout/aside_admin") %>
@@ -13,130 +12,159 @@
 
 
         <div class="profile">
-          <% if (message.length> 0) { %>
-            <div class="alert alert-danger">
-              <%= message %>
-            </div>
-            <% } %>
-              <div class="container">
-
-                <div class="row" style="margin-left: -5%">
-
-
-                  <table>
-                    <thead class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                      <th>Tên</th>
-                      <th>Hình ảnh</th>
-                      <th>Mô tả</th>
-                      <th>Số lượng</th>
-                      <th>Đơn giá</th>
-                      <th>
-                        Tác vụ
-                      </th>
-                    </thead>
-                    <tbody>
-                      <% danhsach.forEach(function(product){ %>
-                        <tr class="text-center">
-                          <td><%- product.name %></td>
-                          <td>
-                            <img class="" src="/upload/<%- product.image %>" alt="<%- product.name %>"
-                              style="padding-right: 6%; width: 80px; height: 80px;" />
-                          </td>
-                          <td><%- product.note %></td>
-                          <td><%- product.quantity %></td>
-                          <td><%- product.price %></td>
-                          <td>
-                            <a href="/delete-product/<%- product._id %>">Xóa </a>
-                            |
-                            <a href="/admin/edit-product/<%- product._id %>">Sửa </a>
-                          </td>
-                        </tr>
-                        <% }); %>
-                    </tbody>
-                  </table>
-
-
-                </div>
+          <div class="header py-3">
+            <h3 class="m-0 font-weight-bold text-primary">Danh sách sản phẩm</h3>
+            <% if (message.length> 0) { %>
+              <div class="alert alert-danger">
+                <%= message %>
               </div>
+              <% } %>
+                <div>
+                  <div></div>
+                  <div style="float: right; margin-right: 60px;"><a href="/admin/insert-product">Thêm mới</a></div>
+                </div>
+          </div>
+          <div class="container">
+
+            <div class="row" style="margin-left: -5%">
 
 
-              <!-- pagination -->
-              <div class="row">
-                <!-- hiển thị phân trang nếu có trang -->
-                <% if(pages> 0) { %>
-                  <nav class="mx-auto">
-                    <ul class="pagination" style="margin-top: 2rem;">
+              <table>
+                <thead class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <th>Tên</th>
+                  <th>Hình ảnh</th>
+                  <th>Mô tả</th>
+                  <th>Số lượng</th>
+                  <th>Đơn giá</th>
+                  <th>
+                    Tác vụ
+                  </th>
+                </thead>
+                <tbody>
+                  <% danhsach.forEach(function(product){ %>
+                    <tr class="text-center">
+                      <td><%- product.name %></td>
+                      <td>
+                        <img class="" src="/upload/<%- product.image %>" alt="<%- product.name %>"
+                          style="padding-right: 6%; width: 80px; height: 80px;" />
+                      </td>
+                      <td><%- product.note %></td>
+                      <td><%- product.quantity %></td>
+                      <td><%- product.price %></td>
+                      <td>
+                        <a href="/admin/edit-product/<%- product._id %>">Sửa </a>
+                        |
+                        <span class="btn-xoa" onClick="deleteProdcut('<%- product._id %>')">Xóa</span>
+                      </td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+              </table>
 
-                      <!-- FIRST ITEM -->
-                      <% if(current==1) { %>
 
-                        <li class="page-item disabled">
-                          <a class="page-link">First</a>
-                        </li>
-                        <% } else { %>
+            </div>
+          </div>
+          <!-- pagination -->
+          <div class="row">
+            <!-- hiển thị phân trang nếu có trang -->
+            <% if(pages> 0) { %>
+              <nav class="mx-auto">
+                <ul class="pagination" style="margin-top: 2rem;">
 
-                          <li class="page-item">
-                            <a class="page-link" href="/admin/list-product">First</a>
-                          </li>
-                          <% } %>
+                  <!-- FIRST ITEM -->
+                  <% if(current==1) { %>
 
-                            <!-- ITEMS  -->
-                            <% var i=(Number(current)> 3 ? Number(current) - 2 : 1) %>
-                              <% if(i !==1) { %>
-                                <li class="page-item disabled">
-                                  <a class="page-link" href="#">...</a>
-                                </li>
-                                <% } %>
-                                  <% for(; i <=(Number(current) + 2) && i <=pages; i++) { %>
-                                    <% if(i==current) { %>
-                                      <li class="page-item active">
-                                        <a class="page-link" href="/admin/list-product/<%= i %>/">
-                                          <%= i %>
-                                        </a>
-                                      </li>
-                                      <% } else { %>
-                                        <li class="page-item">
-                                          <a class="page-link" href="/admin/list-product/<%= i %>/">
-                                            <%= i %>
-                                          </a>
+                    <li class="page-item disabled">
+                      <a class="page-link">First</a>
+                    </li>
+                    <% } else { %>
+
+                      <li class="page-item">
+                        <a class="page-link" href="/admin/list-product">First</a>
+                      </li>
+                      <% } %>
+
+                        <!-- ITEMS  -->
+                        <% var i=(Number(current)> 3 ? Number(current) - 2 : 1) %>
+                          <% if(i !==1) { %>
+                            <li class="page-item disabled">
+                              <a class="page-link" href="#">...</a>
+                            </li>
+                            <% } %>
+                              <% for(; i <=(Number(current) + 2) && i <=pages; i++) { %>
+                                <% if(i==current) { %>
+                                  <li class="page-item active">
+                                    <a class="page-link" href="/admin/list-product/<%= i %>/">
+                                      <%= i %>
+                                    </a>
+                                  </li>
+                                  <% } else { %>
+                                    <li class="page-item">
+                                      <a class="page-link" href="/admin/list-product/<%= i %>/">
+                                        <%= i %>
+                                      </a>
+                                    </li>
+                                    <% } %>
+                                      <% if (i==Number(current) + 2 && i < pages) { %>
+                                        <li class="page-item disabled">
+                                          <a class="page-link" href="#">...</a>
                                         </li>
                                         <% } %>
-                                          <% if (i==Number(current) + 2 && i < pages) { %>
-                                            <li class="page-item disabled">
-                                              <a class="page-link" href="#">...</a>
-                                            </li>
-                                            <% } %>
-                                              <% } %>
+                                          <% } %>
 
-                                                <!-- LAST ITEM -->
-                                                <% if(current==pages) { %>
-                                                  <li class="page-item disabled">
-                                                    <a class="page-link">
-                                                      Last
-                                                    </a>
-                                                  </li>
-                                                  <% } else { %>
+                                            <!-- LAST ITEM -->
+                                            <% if(current==pages) { %>
+                                              <li class="page-item disabled">
+                                                <a class="page-link">
+                                                  Last
+                                                </a>
+                                              </li>
+                                              <% } else { %>
 
-                                                    <li class="page-item">
-                                                      <a class="page-link" href="/admin/list-product/<%= pages %>/">
-                                                        Last
-                                                      </a>
-                                                    </li>
-                                                    <% } %>
-                    </ul>
-                  </nav>
-                  <% } %>
-              </div>
-
-
+                                                <li class="page-item">
+                                                  <a class="page-link" href="/admin/list-product/<%= pages %>/">
+                                                    Last
+                                                  </a>
+                                                </li>
+                                                <% } %>
+                </ul>
+              </nav>
+              <% } %>
+          </div>
         </div>
-
-
-
-
-
-
-
-
-
   </body>
+
+  <script>
+    function deleteProdcut(id) {
+      Swal.fire({
+           title: 'Thông báo',
+           text: "Bạn có muốn xóa sản phẩm này không ?",
+           showCancelButton: true,
+           confirmButtonColor: '#3085d6',
+           cancelButtonColor: '#d33',
+           confirmButtonText: 'Đồng ý',
+           cancelButtonText: 'Hủy'
+           }).then((result) => {
+              if(result.isConfirmed==true){
+                fetch(`/delete-product/${id}`, {
+                  method: 'GET',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  })
+                  .then(response =>{
+                    console.log(response);
+                    Swal.fire({
+                      title: 'Thành công',
+                      text: 'Xóa sản phẩm thành công!',
+                    }).then(() => {
+                      window.location.reload();
+                    });
+                  })
+                  .catch(error => {
+                      console.error('Error calling API:', error);
+                });
+              }
+      });
+    }
+  </script>
