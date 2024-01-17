@@ -14,11 +14,17 @@
         <div class="profile">
           <div class="header py-3">
             <h3 class="m-0 font-weight-bold text-primary">Danh sách sản phẩm</h3>
-            <% if (message.length> 0) { %>
-              <div class="alert alert-danger">
-                <%= message %>
-              </div>
-              <% } %>
+            <% if (message.length > 0) { %>
+              <script>
+                console.log("<%= message %>");
+                Swal.fire({
+                  icon: "success",
+                  title: "<%= message %>",
+                  showConfirmButton: false,
+                  timer: 1000
+                });
+              </script>
+            <% } %>
                 <div>
                   <div></div>
                   <div style="float: right; margin-right: 60px;"><a href="/admin/insert-product">Thêm mới</a></div>
@@ -43,12 +49,12 @@
                 <tbody>
                   <% danhsach.forEach(function(product){ %>
                     <tr class="text-center">
-                      <td><%- product.name %></td>
+                      <td class="text-left"><%- product.name %></td>
                       <td>
                         <img class="" src="/upload/<%- product.image %>" alt="<%- product.name %>"
                           style="padding-right: 6%; width: 80px; height: 80px;" />
                       </td>
-                      <td><%- product.note %></td>
+                      <td class="text-left"><%- product.note %></td>
                       <td><%- product.quantity %></td>
                       <td><%- product.price %></td>
                       <td>
@@ -60,8 +66,6 @@
                     <% }); %>
                 </tbody>
               </table>
-
-
             </div>
           </div>
           <!-- pagination -->

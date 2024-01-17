@@ -28,7 +28,7 @@
               <tbody>
                 <% var i=0 %>
                   <% data.forEach(function(item){ i ++%>
-                    <tr>
+                    <tr class="text-center">
                       <td>
                         <%= i %>
                       </td>
@@ -49,8 +49,8 @@
                             <%}%>
                       </td>
                       <td>
-                        <a href="/view/<%= item._id %>">Xem</a> |
-                        <a href="/xoa/<%= item._id %>">Xóa</a>
+                        <a href="/view/<%= item._id %>">Xem chi tiết</a> 
+                        
                       </td>
                     </tr>
                     <%})%>

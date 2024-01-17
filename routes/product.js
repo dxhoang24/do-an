@@ -17,6 +17,7 @@ var storage = multer.diskStorage({
 var upload = multer({
   storage: storage,
   fileFilter: function (req, file, cb) {
+    console.log(file);
     if (
       file.mimetype == "image/jpg" ||
       file.mimetype == "image/PNG" ||
@@ -234,10 +235,8 @@ product.post("/insert", (req, res) => {
         image: req.file.filename,
         name: req.body.name,
         cateID: req.body.cateID,
-
         quantity: req.body.quantity,
         note: req.body.note,
-
         price: req.body.price,
         date: Date.now(),
       });
@@ -245,7 +244,27 @@ product.post("/insert", (req, res) => {
         if (err) {
           res.render("admin/insert-product", { message: "Lỗi tải lên!!!" });
         } else {
-          res.redirect("/admin/list-product");
+          // res.redirect("/admin/list-product",);
+                let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
+                let page = req.params.page || 1;
+
+                products
+                  .find() // find tất cả các data
+                  .sort({ date: "descending" })
+                  .skip(perPage * page - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
+                  .limit(perPage)
+                  .exec((err, data) => {
+                    products.countDocuments((err, count) => {
+                      // đếm để tính có bao nhiêu trang
+                      if (err) return next(err);
+                      res.render("admin/list-product", {
+                        danhsach: data,
+                        message: "Thêm mới thành công",
+                        current: page, // page hiện tại
+                        pages: Math.ceil(count / perPage),
+                      }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
+                    });
+                  });
         }
       });
     }

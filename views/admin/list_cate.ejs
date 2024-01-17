@@ -17,11 +17,17 @@
                 <div class="card shadow mb-4">
                     <div class="card-header py-3" >
                         <h3 class="m-0 font-weight-bold text-primary">Danh sách loại sản phẩm</h3>
-                        <% if (message.length> 0) { %>
-                            <div class="alert alert-danger">
-                                <%= message %>
-                            </div>
-                            <% } %>
+                        <% if (message.length > 0) { %>
+                            <script>
+                              console.log("<%= message %>");
+                              Swal.fire({
+                                icon: "success",
+                                title: "<%= message %>",
+                                showConfirmButton: false,
+                                timer: 1000
+                              });
+                            </script>
+                          <% } %>
                         <div>
                             <div></div>
                             <div style="float: right;"><a href="/admin/insertcate">Thêm mới</a></div>
@@ -64,5 +70,5 @@
     </body>
 
 <script>
-    
+
 </script>
