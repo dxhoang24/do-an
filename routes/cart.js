@@ -35,7 +35,6 @@ cart.get("/add-to-cart/:id", function (req, res) {
   products.findById(id).then(function (data) {
     giohang.add(id, data);
     req.session.cart = giohang;
-    console.log(giohang);
     res.redirect("/shopping-cart");
   });
 });
@@ -136,10 +135,11 @@ cart.get("/view/:id", (req, res) => {
     res.render("admin/view-order", { cart: data });
   });
 });
-cart.get("/xacnhan/:id", function (req, res, next) {
+cart.get("/xacnhan/:id",async function (req, res, next) {
   var id = req.params.id;
   Cart.findById(id, function (err, data) {
     data.st = 1;
+    updateProductQuantities(data.cart)
     data.save();
     req.flash("success_msg", "Đã Thêm Thành Công");
     res.render("admin/view-order", { cart: data });
@@ -194,5 +194,16 @@ cart.get("/xoa/:id", function (req, res) {
     }
   });
 });
-
+async function updateProductQuantities(data) {
+  try {
+    for (const el of data) {
+      console.log("ekl", el);
+      let num =  Number(el.qty);
+      await products.findByIdAndUpdate(el.item._id, { $inc: { quantity: -num } });
+    }
+    console.log("Update successful!");
+  } catch (error) {
+    console.error("Error updating product quantities:", error);
+  }
+}
 module.exports = cart;

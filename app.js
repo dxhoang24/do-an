@@ -11,6 +11,7 @@ require('colors');
 
 global._ = require('underscore');
 global._moment = require('moment');
+var swal = require('sweetalert2')
 global.fsx = require('fs.extra');
 global.path = require('path');
 global.__basedir = __dirname;
@@ -22,6 +23,7 @@ const dotenv = require('dotenv')
 dotenv.config()
 
 global.moment = global._moment;
+
 global._async = require('async');
 global.mongoose = require('mongoose');
 global.mongodb = require('mongodb');
@@ -30,6 +32,7 @@ global.pagination = require('pagination');
 require(path.join(__dirname, 'libs', 'resource'));
 
 var app = express();
+
 // link router
 var cate = require("./routes/cate.js");
 var view_user = require("./routes/view_user.js");
@@ -61,11 +64,9 @@ app.use(session({
 app.use(flash());
 app.use(passport.initialize())
 app.use(passport.session());
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-
 
 app.get('/', function(req,res){
   if(!req.session.loggin){
@@ -122,7 +123,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(require('cookie-parser')('dft.vn'));
 app.use(require('express-session')({ secret: 'dft.vn', resave: false, saveUninitialized: true }));
-app.use(require('multer')({ dest: path.join(__dirname, 'temp') }).any());
+// app.use(require('multer')({ dest: path.join(__dirname, 'temp') }).any());
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 require(path.join(_rootPath, 'libs', 'router.js'))(app);
 //get router

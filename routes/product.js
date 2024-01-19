@@ -426,10 +426,9 @@ product.post("/Search", (req, res) => {
   if (req.session.loggin) {
     user = req.user;
     if (user.role == "admin") {
-      let name = new RegExp(_.stringRegex(req.body.name), "i");
+      let name = new RegExp(req.body.name, "i");
       cates.find().then(function (data) {
         item = data;
-
         products
           .find({
             name: name,
@@ -446,7 +445,7 @@ product.post("/Search", (req, res) => {
           });
       });
     } else {
-      let name = new RegExp(_.stringRegex(req.body.name), "i");
+      let name = new RegExp(req.body.name, "i");
 
       cates.find().then(function (data) {
         item = data;
@@ -474,7 +473,7 @@ product.post("/Search", (req, res) => {
 
       products
         .find({
-          name: { $regex: name },
+          name: { $regex: name, $options:"i" },
         })
         .limit(12)
         .then((data) => {
