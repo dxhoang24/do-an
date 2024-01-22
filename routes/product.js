@@ -5,6 +5,7 @@ var multer = require("multer");
 const { response } = require("express");
 var cates = require("../models/Cate.js");
 const cate = require("./cate");
+const exportExcelInbound = require("../libs/export.js")
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -488,5 +489,35 @@ product.post("/Search", (req, res) => {
     });
   }
 });
+
+product.get("/download", (req, res) => {
+  let data = [
+    {
+      caller: '012345',
+      start_time: '2024-01-10',
+      end_time: '2024-01-11',
+      end_code: '123'
+    },
+    {
+      caller: '9999',
+      start_time: '2024-01-10',
+      end_time: '2024-01-11',
+      end_code: '123'
+    },
+  ]
+  let excel = {
+    fileName: 'ReportInboundMissCall_',
+    title: 'BÁO CÁO GỌI VÀO - BÁO CÁO CHI TIẾT CUỘC GỌI BỊ NHỠ THEO KHÁCH HÀNG',
+    titleHeadTable: [
+        { key: 'caller', value: 'Số điện thoại' },
+        { key: 'start_time', value: 'Thời gian bắt đầu'},
+        { key: 'end_time', value: 'Thời gian kết thúc', },
+        { key: 'waiting_time', value: 'Thời gian chờ' },
+        { key: 'end_code', value: 'Lý do nhỡ'},
+    ],
+    valueWidthColumn: [20, 30, 30, 30, 40]
+  }
+  exportExcelInbound.exportExcel(data, excel, res, req);
+})
 
 module.exports = product;
