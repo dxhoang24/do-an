@@ -14,7 +14,6 @@
         <div class="profile">
           <div class="header py-3">
             <h3 class="m-0 font-weight-bold text-primary">Danh sách sản phẩm</h3>
-            <a href="/download">Xuất Excel</a>
             <% if (message.length > 0) { %>
               <script>
                 console.log("<%= message %>");
@@ -28,12 +27,15 @@
             <% } %>
                 <div>
                   <div></div>
-                  <div style="float: right; margin-right: 60px;"><a href="/admin/insert-product">Thêm mới</a></div>
+                  <div style="float: right; margin-right: 60px;">
+                    <a href="/download">Xuất Excel</a> |
+                    <a href="/admin/insert-product">Thêm mới</a>
+                  </div>
                 </div>
           </div>
           <div class="container">
 
-            <div class="row" style="margin-left: -5%">
+            <div class="row">
 
 
               <table>

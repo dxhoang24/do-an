@@ -50,10 +50,11 @@ cate.get("/admin/edit_cate/:id", (req, res) => {
     }
   });
 });
-cate.post("/updatecate", (req, res) => {
+cate.post("/updatecate/:id", (req, res) => {
   cates.updateOne(
+    {_id:req.params.id},
     {
-      namecate: req.body.namecate,
+      $set:{namecate: req.body.namecate,}
     },
     function (err) {
       if (err) {

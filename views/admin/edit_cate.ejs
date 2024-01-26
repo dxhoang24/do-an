@@ -18,18 +18,13 @@
     </div> -->
 
         <br>
-        <form class="form-signin" action="/updatecate" method="POST">
+        <form class="form-signin" action="/updatecate/<%- item._id%>" method="POST">
           <h2>Cập nhật</h2>
-
           <br>
-
           <div class="form-group">
-            <input type="text" name="namecate" placeholder="<%- item.namecate%>" />
+            <input type="text" name="namecate" value="<%- item.namecate%>" />
           </div>
-
           <button class="btn  btn-warning" type="submit" style="width:15%;">Cập nhật</button>
         </form>
-
-
     </div>
   </body>

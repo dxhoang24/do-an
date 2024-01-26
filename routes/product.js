@@ -5,7 +5,7 @@ var multer = require("multer");
 const { response } = require("express");
 var cates = require("../models/Cate.js");
 const cate = require("./cate");
-const exportExcelInbound = require("../libs/export.js")
+const exportExcel = require("../libs/export.js")
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -490,34 +490,22 @@ product.post("/Search", (req, res) => {
   }
 });
 
-product.get("/download", (req, res) => {
-  let data = [
-    {
-      caller: '012345',
-      start_time: '2024-01-10',
-      end_time: '2024-01-11',
-      end_code: '123'
-    },
-    {
-      caller: '9999',
-      start_time: '2024-01-10',
-      end_time: '2024-01-11',
-      end_code: '123'
-    },
-  ]
+product.get("/download",async (req, res) => {
+
+  let data = await products.find()
+  console.log("data",data);
   let excel = {
-    fileName: 'ReportInboundMissCall_',
-    title: 'BÁO CÁO GỌI VÀO - BÁO CÁO CHI TIẾT CUỘC GỌI BỊ NHỠ THEO KHÁCH HÀNG',
+    fileName: 'Danhsachsanpham_',
+    title: 'Danh sách sản phẩm',
     titleHeadTable: [
-        { key: 'caller', value: 'Số điện thoại' },
-        { key: 'start_time', value: 'Thời gian bắt đầu'},
-        { key: 'end_time', value: 'Thời gian kết thúc', },
-        { key: 'waiting_time', value: 'Thời gian chờ' },
-        { key: 'end_code', value: 'Lý do nhỡ'},
+        { key: 'name', value: 'Tên sản phẩm' },
+        { key: 'note', value: 'Mô tả'},
+        { key: 'quantity', value: 'Số lượng'},
+        { key: 'price', value: 'Đơn giá' }
     ],
-    valueWidthColumn: [20, 30, 30, 30, 40]
+    valueWidthColumn: [50, 50 , 50, 50]
   }
-  exportExcelInbound.exportExcel(data, excel, res, req);
+  exportExcel.exportExcel(data, excel, res, req);
 })
 
 module.exports = product;

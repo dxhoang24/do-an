@@ -33,12 +33,12 @@ function exportExcel(dataMap, excel, req, res){
     waterFallTask.push(function (workbook, next) {
         var sheet = workbook.addWorksheet('sheet', { state: 'visible' });
         setWeightColumn(sheet, valueWidthColumn);
-        creatTitleExcel(sheet, 
-            excel.title,
-            req.query.startTime || '',
-            req.query.endTime || '',
-            `ICT-HN`
-        );
+    //    creatTitleExcel(sheet, 
+    //         excel.title,
+    //         req.query.startTime || '',
+    //         req.query.endTime || '',
+    //         `ICT-HN`
+    //     );
         createHead(sheet, titleHeadTable);
 
         if(dataMap.length <= 0){
@@ -106,39 +106,39 @@ function setWeightColumn(worksheet, valueWidthColumn) {
 	})
 }
 
-function creatTitleExcel(worksheet, titleReport, from, to, account) {
-    worksheet.addRow(['']);
-	worksheet.addRow(['BELLSYSTEM 24 VIETNAM','','','CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM']);
-	worksheet.lastRow.alignment = { vertical: 'middle', horizontal: 'center' };
-	worksheet.lastRow.font = { family: 4, name: 'Time New Roman', size: 13, bold: true};
-	worksheet.mergeCells('A2:C2');
-	worksheet.mergeCells('D2:H2');
+// function creatTitleExcel(worksheet, titleReport, from, to, account) {
+//     worksheet.addRow(['']);
+// 	worksheet.addRow(['BELLSYSTEM 24 VIETNAM','','','CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM']);
+// 	worksheet.lastRow.alignment = { vertical: 'middle', horizontal: 'center' };
+// 	worksheet.lastRow.font = { family: 4, name: 'Time New Roman', size: 13, bold: true};
+// 	worksheet.mergeCells('A2:C2');
+// 	worksheet.mergeCells('D2:H2');
 
-	worksheet.addRow([account || 'ICT - HN', '','','Độc lập - Tự do - Hạnh phúc']);
-	worksheet.lastRow.alignment = { vertical: 'middle', horizontal: 'center'};
-	worksheet.lastRow.font = { family: 4, name: 'Time New Roman', size: 13, bold: true }
-	worksheet.mergeCells('A3:C3');
-	worksheet.mergeCells('D3:H3');
+// 	worksheet.addRow([account || 'ICT - HN', '','','Độc lập - Tự do - Hạnh phúc']);
+// 	worksheet.lastRow.alignment = { vertical: 'middle', horizontal: 'center'};
+// 	worksheet.lastRow.font = { family: 4, name: 'Time New Roman', size: 13, bold: true }
+// 	worksheet.mergeCells('A3:C3');
+// 	worksheet.mergeCells('D3:H3');
 
-	worksheet.addRow(['']);
-	worksheet.addRow(['']);
+// 	worksheet.addRow(['']);
+// 	worksheet.addRow(['']);
 
-	worksheet.addRow([titleReport]);
-	worksheet.lastRow.alignment = { vertical: 'middle', horizontal: 'center' };
-	worksheet.lastRow.font = {name:'Time New Roman', family: 4, size: 18, underline: 'true', bold:true};
-	worksheet.mergeCells('A6:H6');
-    const column6 = worksheet.getRow(6);
-    column6.height = 30;
+// 	worksheet.addRow([titleReport]);
+// 	worksheet.lastRow.alignment = { vertical: 'middle', horizontal: 'center' };
+// 	worksheet.lastRow.font = {name:'Time New Roman', family: 4, size: 18, underline: 'true', bold:true};
+// 	worksheet.mergeCells('A6:H6');
+//     const column6 = worksheet.getRow(6);
+//     column6.height = 30;
 
-    let str = '(Thời gian từ ngày: ';
-    str += (from ? (from + " ") : "... ");
-	str += (to ? ("đến ngày " + to + ")") : "đến ngày ... )");
-	worksheet.addRow([str]);
-	worksheet.lastRow.font = { family: 4, name: 'Time New Roman', size: 13};
-	worksheet.lastRow.alignment = { vertical: 'middle', horizontal: 'center' };
-	worksheet.mergeCells('A7:H7');
-	worksheet.addRow([""]);
-}
+//     let str = '(Thời gian từ ngày: ';
+//     str += (from ? (from + " ") : "... ");
+// 	str += (to ? ("đến ngày " + to + ")") : "đến ngày ... )");
+// 	worksheet.addRow([str]);
+// 	worksheet.lastRow.font = { family: 4, name: 'Time New Roman', size: 13};
+// 	worksheet.lastRow.alignment = { vertical: 'middle', horizontal: 'center' };
+// 	worksheet.mergeCells('A7:H7');
+// 	worksheet.addRow([""]);
+// }
 
 function createHead(worksheet, titleHeadTable) {
 	//Header 01

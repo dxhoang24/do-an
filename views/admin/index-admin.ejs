@@ -1,5 +1,16 @@
 <%- include("../layout/head") %>
-
+<%
+    function calculateTotal(data) {
+        let total = 0;
+        data.forEach((item) => {
+        item.cart.forEach((product) => {
+            total += product.price;
+            });
+        });
+    
+        return total;
+    }
+%>
 
     <link rel="stylesheet" href="/css/body.css">
 
@@ -26,13 +37,13 @@
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                            Lượt truy cập</div>
+                                            Doanh thu</div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            <SCRIPT>page_counter(jcount);</SCRIPT>
+                                            <%= calculateTotal(listCart) %>đ
                                         </div>
                                     </div>
                                     <div class="col-auto">
-                                        <i class="fa fa-signal" aria-hidden="true"></i>
+                                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                                     </div>
                                 </div>
                             </div>
@@ -55,7 +66,7 @@
 
                                     </div>
                                     <div class="col-auto">
-                                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        <i class="fa-solid fa-shirt fa-2x text-gray-300"></i>
                                     </div>
                                 </div>
                             </div>
@@ -78,7 +89,7 @@
                                         </div>
                                     </div>
                                     <div class="col-auto">
-                                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                        <i class="fa-solid fa-user  fa-2x text-gray-300"></i>
                                     </div>
                                 </div>
                             </div>
@@ -92,15 +103,7 @@
                     <iframe width="560" height="315" src="https://www.youtube.com/embed/p79Aon7Kypo" frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowfullscreen></iframe>
-
                 </div>
-
-
         </div>
-
-
-
-
-
-
     </body>
+

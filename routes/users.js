@@ -4,18 +4,23 @@ const { check, validationResult } = require("express-validator");
 var passport = require("passport");
 const userModel = require("../models/user");
 const products = require("../models/products");
+var Cart = require("../models/Cart.js");
+
 /* GET home page. */
-router.get("/home", function (req, res, next) {
+router.get("/home",async function (req, res, next) {
   if (req.session.loggin) {
     user = req.user;
     if (user.role == "admin") {
+      let arrCart = await Cart.find()
       userModel.find({ role: "user" }).then(function (data) {
         listuser = data;
+        listCart= arrCart
         products.find().then(function (data) {
           res.render("admin/index-admin", {
             danhsach: data,
           });
         });
+        
       });
     } else {
       products

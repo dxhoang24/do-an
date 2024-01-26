@@ -13,35 +13,38 @@
     font-size: 25px;
     text-align: center;
   }
-  
+  .btn{
+    font-weight: 600;
+    height: 40px;
+    line-height: 40px;
+  }
 </style>
 <link rel="stylesheet" href="css/body.css">
 <table>
 
   <tr>
     <th>
-      Admin
-      <hr />
+      <a href="/home" style="text-decoration: none;">
+        ADMIN
+      </a>  
     </th>
   </tr>
   <tr>
       <td>
         <div class="dropdown dropright">
           <p class="btn">
-          <a href="/home">
+          <a href="/home"  style="text-decoration: none;">
             Thông tin
           </a>  
           </p>
-     
         </div>
- 
       </td>
   </tr>
   <tr>
     <td>
       <div class="dropdown dropright">
         <p class="btn">
-          <a  href="/admin/listcate">  Quản lý loại sản phẩm</a>
+          <a  href="/admin/listcate"  style="text-decoration: none;">  Quản lý loại sản phẩm</a>
         </p>
       </div>
 
@@ -51,42 +54,36 @@
     <td>
       <div class="dropdown dropright">
         <p class="btn">
-          <a  href="/admin/list-product">  Quản lý sản phẩm</a>
+          <a  href="/admin/list-product"  style="text-decoration: none;">  Quản lý sản phẩm</a>
         </p>
       </div>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <div class=" btn dropdown dropright">
-        <a href="/view_user" >   
-       Quản lý khách hàng
-
-      </a>
-      </div>
-   
     </td>
   </tr>
   <tr>
     <td>
       <div class="dropdown dropright">
         <p class="btn" >
-          <a href="/list_order">Đơn đặt hàng </a> 
+          <a href="/view_user"  style="text-decoration: none;">Quản lý tài khoản </a>
         </p>
-     
       </div>
- 
     </td>
   </tr>
   <tr>
     <td>
       <div class="dropdown dropright">
         <p class="btn" >
-  <a href="/admin/notification">      Thông báo </a> 
+          <a href="/list_order"  style="text-decoration: none;">Đơn đặt hàng </a> 
         </p>
-     
       </div>
- 
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <div class="dropdown dropright">
+        <p class="btn" >
+           <a href="/admin/notification"  style="text-decoration: none;">Thông báo </a> 
+        </p>
+      </div>
     </td>
   </tr>
 </table>
