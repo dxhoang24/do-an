@@ -27,7 +27,7 @@
                   </a></td>
 
                 <td>
-                  <%= item.item.price%> đ
+                  <%= item.item.price%> VNĐ
                 </td>
 
                 <td>
@@ -46,7 +46,7 @@
                 </td>
 
                 <td id="total-<%= index %>">
-                  <%= item.price%> đ
+                  <%= item.price%> VNĐ
                 </td>
                 <td>
                   <a href="/delCart2/<%= item.item._id %>" style="color: red;"> <i class="fas fa-times"></i></a>
@@ -92,16 +92,16 @@
         let total = 0;
         data.forEach((element, index2) => {
           element.qty = (document.getElementById(`total-${index2}`).textContent &&
-            parseInt(document.getElementById(`total-${index2}`).textContent.replace('đ', '')) ||
+            parseInt(document.getElementById(`total-${index2}`).textContent.replace('VNĐ', '')) ||
             0) / Number(element.item.price)
           element.price = document.getElementById(`total-${index2}`).textContent &&
-            parseInt(document.getElementById(`total-${index2}`).textContent.replace('đ', '')) ||
+            parseInt(document.getElementById(`total-${index2}`).textContent.replace('VNĐ', '')) ||
             0
           total += document.getElementById(`total-${index2}`).textContent &&
-            parseInt(document.getElementById(`total-${index2}`).textContent.replace('đ', '')) ||
+            parseInt(document.getElementById(`total-${index2}`).textContent.replace('VNĐ', '')) ||
             0;
         });
-        document.getElementById('totalamout').textContent = total + ' đ'
+        document.getElementById('totalamout').textContent = total + ' VNĐ'
 
       }
       function updateCart() {
