@@ -32,11 +32,12 @@ about.post('/create_payment_url', function (req, res, next) {
 
   var createDate = moment(date, 'yyyymmddHHmmss').format('yyyymmddHHmmss');
   var orderId = moment(date, 'HHmmss').format('HHmmss');
-  var amount = req.body.amount;
-  var bankCode = req.body.bankCode;
+  // var amount = req.body.amount;
+  var amount = 10000
+  var bankCode = 'NCB'
   
-  var orderInfo = req.body.orderDescription;
-  var orderType = req.body.orderType;
+  var orderInfo = "billpayment";
+  var orderType = "VNP001";
   var locale = req.body.language;
   if(locale === null || locale === ''){
       locale = 'vn';

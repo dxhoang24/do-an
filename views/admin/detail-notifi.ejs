@@ -40,7 +40,6 @@
 
     <script>
         let data = JSON.parse(decodeURIComponent(`<%- encodeURIComponent(JSON.stringify(list)); %>`));
-        console.log("doct");
         function sendmail() {
             let noidung = document.getElementById("phanhoi").value
             let data2 = {
@@ -64,8 +63,5 @@
                     console.error('Error calling API:', error);
                 });
             }
-            
-            
-        
       }
     </script>
