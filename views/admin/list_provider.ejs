@@ -13,7 +13,7 @@
             <%- include("../layout/nav_admin") %>
                 <div class="card shadow mb-4">
                     <div class="card-header py-3" >
-                        <h3 class="m-0 font-weight-bold text-primary">Danh sách loại sản phẩm</h3>
+                        <h3 class="m-0 font-weight-bold text-primary">Danh sách nhà cung cấp</h3>
                         <% if (message.length > 0) { %>
                             <script>
                               console.log("<%= message %>");
@@ -27,7 +27,7 @@
                           <% } %>
                         <div>
                             <div></div>
-                            <div style="float: right;"><a href="/admin/insertcate">Thêm mới</a></div>
+                            <div style="float: right;"><a href="/admin/insertprovider">Thêm mới</a></div>
                         </div>
                     </div>
                     <div class="card-body">
@@ -35,27 +35,31 @@
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Loại</th>
+                                        <th>STT</th>
+                                        <th>Tên nhà cung cấp</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Email</th>
+                                        <th>Địa chỉ</th>
                                         <th>Tùy chọn</th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
                                     <% var i=0 %>
-                                        <% item.forEach(function(cate){ i++ %>
+                                        <% item.forEach(function(provider){ i++ %>
                                             <tr class="td">
                                                 <td><%-i %></td>
-                                                <td><%-cate.namecate %></td>
+                                                <td><%-provider.nameprovider %></td>
+                                                <td><%-provider.phone %></td>
+                                                <td><%-provider.email %></td>
+                                                <td><%-provider.address %></td>
                                                 <td>
-                                                    <a href="/admin/edit_cate/<%= cate._id %>">Sửa </a>
+                                                    <a href="/admin/edit_provider/<%= provider._id %>">Sửa </a>
                                                     |
-                                                    <a href="/delete_cate/<%= cate._id %>">Xóa </a>
+                                                    <a href="/delete_provider/<%= provider._id %>">Xóa </a>
                                                 </td>
                                             </tr>
                                             <% }) %>
-
-
                                 </tbody>
                             </table>
                         </div>

@@ -34,17 +34,18 @@ require(path.join(__dirname, 'libs', 'resource'));
 var app = express();
 
 // link router
-var cate = require("./routes/cate.js");
-var view_user = require("./routes/view_user.js");
-var cart = require("./routes/cart.js");
-var detail_notifi = require("./routes/detail-notifi.js");
-var notifi = require("./routes/notification.js");
-var detail_product = require("./routes/detail-product.js");
-var router = require("./routes/users.js")
-var product = require('./routes/product.js');
-var client = require('./routes/client.js');
-var about = require('./routes/about.js');
-var contact = require('./routes/contact.js');
+var cate = require("./controllers/cate.js");
+var view_user = require("./controllers/view_user.js");
+var cart = require("./controllers/cart.js");
+var detail_notifi = require("./controllers/detail-notifi.js");
+var notifi = require("./controllers/notification.js");
+var detail_product = require("./controllers/detail-product.js");
+var router = require("./controllers/users.js")
+var product = require('./controllers/product.js');
+var client = require('./controllers/client.js');
+var about = require('./controllers/about.js');
+var contact = require('./controllers/contact.js');
+var provider = require('./controllers/provider.js');
 
 //Link models
 var products = require("./models/products.js");
@@ -138,6 +139,7 @@ app.use("/", view_user);
 app.use("/", product);
 app.use("/", cate);
 app.use("/", detail_product);
+app.use("/", provider);
 
 app.use(function (req, res, next) {
   res.render('404', { title: '404 | Page not found' });
