@@ -46,6 +46,8 @@ var client = require('./controllers/client.js');
 var about = require('./controllers/about.js');
 var contact = require('./controllers/contact.js');
 var provider = require('./controllers/provider.js');
+var size = require('./controllers/sizeproduct.js');
+var color = require('./controllers/colorproduct.js');
 
 //Link models
 var products = require("./models/products.js");
@@ -138,6 +140,8 @@ app.use("/", cart);
 app.use("/", view_user);
 app.use("/", product);
 app.use("/", cate);
+app.use("/", color);
+app.use("/", size);
 app.use("/", detail_product);
 app.use("/", provider);
 

@@ -1,39 +1,39 @@
 const e = require("express");
 var express = require("express");
-var size = express.Router();
-var sizes = require("../models/sizeProduct.js");
+var color = express.Router();
+var colors = require("../models/colorProduct.js");
 var products = require("../models/products.js");
-size.get("/isize", (req, res) => {
-  res.render("admin/insert_size");
+color.get("/icolor", (req, res) => {
+  res.render("admin/insert_color");
 });
-size.get("/listsize", (req, res) => {
-  sizes.find().then(function (data) {
+color.get("/listcolor", (req, res) => {
+  colors.find().then(function (data) {
     console.log(data);
-    res.render("user/list_size", { item: data });
+    res.render("user/list_color", { item: data });
   });
 });
-size.get("/admin/listsize", checkadmin, (req, res) => {
+color.get("/admin/listcolor", checkadmin, (req, res) => {
   var message = req.flash("error");
-  sizes.find().then(function (data) {
-    res.render("admin/list_size", { item: data, message: message });
+  colors.find().then(function (data) {
+    res.render("admin/list_color", { item: data, message: message });
   });
 });
-size.get("/admin/insertsize", checkadmin, (req, res) => {
-  res.render("admin/insert_size");
+color.get("/admin/insertcolor", checkadmin, (req, res) => {
+  res.render("admin/insert_color");
 });
 
-size.post("/insertsize", (req, res) => {
-  var size = sizes({
-    namesize: req.body.namesize,
+color.post("/insertcolor", (req, res) => {
+  var color = colors({
+    namecolor: req.body.namecolor,
   });
-  size.save(function (err, data) {
+  color.save(function (err, data) {
     if (err) {
-      res.redirect("/isize", {
+      res.redirect("/icolor", {
         message: "Thêm mới không thành công",
       });
     } else {
-      sizes.find().then(function (data) {
-        res.render("admin/list_size", {
+      colors.find().then(function (data) {
+        res.render("admin/list_color", {
           item: data,
           message: "Thêm mới thành công",
         });
@@ -41,29 +41,29 @@ size.post("/insertsize", (req, res) => {
     }
   });
 });
-size.get("/admin/edit_size/:id", (req, res) => {
-  sizes.findById(req.params.id, function (err, data) {
+color.get("/admin/edit_color/:id", (req, res) => {
+  colors.findById(req.params.id, function (err, data) {
     if (!err) {
-      res.render("admin/edit_size", {
+      res.render("admin/edit_color", {
         item: data,
       });
     }
   });
 });
-size.post("/updatesize/:id", (req, res) => {
-  sizes.updateOne(
+color.post("/updatecolor/:id", (req, res) => {
+  colors.updateOne(
     {_id:req.params.id},
     {
-      $set:{namesize: req.body.namesize,}
+      $set:{namecolor: req.body.namecolor,}
     },
     function (err) {
       if (err) {
-        res.redirect("/admin/edit_size", {
+        res.redirect("/admin/edit_color", {
           message: "Cập nhật không thành công",
         });
       } else {
-        sizes.find().then(function (data) {
-          res.render("admin/list_size", {
+        colors.find().then(function (data) {
+          res.render("admin/list_color", {
             item: data,
             message: "Cập nhật thành công",
           });
@@ -72,12 +72,12 @@ size.post("/updatesize/:id", (req, res) => {
     }
   );
 });
-size.get("/size/:id", (req, res) => {
+color.get("/color/:id", (req, res) => {
   let perPage = 8; // số lượng sản phẩm xuất hiện trên 1 page
   let page = req.params.page || 1;
 
   products
-    .find({ sizeID: req.params.id }) // find tất cả các data
+    .find({ colorID: req.params.id }) // find tất cả các data
     .sort({ date: "descending" })
     .skip(perPage * page - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
     .limit(perPage)
@@ -85,7 +85,7 @@ size.get("/size/:id", (req, res) => {
       products.countDocuments((err, count) => {
         // đếm để tính có bao nhiêu trang
         if (err) return next(err);
-        res.render("user/view_size", {
+        res.render("user/view_color", {
           danhsach: data,
           message: "Xóa thành công",
           current: page, // page hiện tại
@@ -94,14 +94,14 @@ size.get("/size/:id", (req, res) => {
       });
     });
 });
-size.get("/delete_size/:id", (req, res) => {
+color.get("/delete_color/:id", (req, res) => {
   if (req.session.loggin) {
-    sizes.deleteOne({ _id: req.params.id }, function (err) {
+    colors.deleteOne({ _id: req.params.id }, function (err) {
       if (err) {
-        res.redirect("/admin/listsize");
+        res.redirect("/admin/listcolor");
       } else {
-        sizes.find().then(function (data) {
-          res.render("admin/list_size", {
+        colors.find().then(function (data) {
+          res.render("admin/list_color", {
             item: data,
             message: "Xóa thành công",
           });
@@ -119,4 +119,4 @@ function checkadmin(req, res, next) {
     next();
   }
 }
-module.exports = size;
+module.exports = color;
