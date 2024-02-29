@@ -1,6 +1,5 @@
 <%- include("../layout/head") %>
 
-
   <style>
     .form-group {
       width: 50%;
@@ -25,22 +24,62 @@
             </div>
             <% } %>
               <br>
-              <div class="form-group">
-                <input type="text" name="name" class="form-control" placeholder="Tên sản phẩm" required>
+            <div style="width: 900px;">
+              <div class="row">
+                  <div class="col-md-3">
+                      <label class="form-control-label">Tên sản phẩm</label>
+                  </div>
+                  <div class="col-md-9 form-group">
+                    <input type="text" name="name" class="form-control" placeholder="Tên sản phẩm" required>
+                  </div>
               </div>
-              <div class="form-group">
-                <input type="number" name="quantity" class="form-control" placeholder="Số lượng" required>
+              <div class="row">
+                <div class="col-md-3">
+                    <label class="form-control-label">Số lượng</label>
+                </div>
+                <div class="col-md-9 form-group">
+                  <input type="number" name="quantity" class="form-control" placeholder="Số lượng" required>
+                </div>
               </div>
-              <div class="form-group">
-                <input type="text" name="note" class="form-control" placeholder="Mô tả" required>
+              <div class="row">
+                <div class="col-md-3">
+                    <label class="form-control-label">Mô tả</label>
+                </div>
+                <div class="col-md-9 form-group">
+                  <input type="text" name="note" class="form-control" placeholder="Mô tả" required>
+                </div>
               </div>
-              <div class="form-group">
-                <input type="number" name="price" class="form-control" placeholder="Giá bán" required>
+              <div class="row">
+                <div class="col-md-3">
+                    <label class="form-control-label">Giá bán</label>
+                </div>
+                <div class="col-md-9 form-group">
+                  <input type="number" name="price" class="form-control" placeholder="Giá bán" required>
+                </div>
               </div>
-              <div class="form-group">
-                <div class="controls">
+              <div class="row">
+                <div class="col-md-3">
+                    <label class="form-control-label">Nhà cung cấp</label>
+                </div>
+                <div class="col-md-9 form-group">
+                  <select class="form-control" id="providerID" name="providerID">
+                    <option value="">---Chọn---</option>
+                    <% providers.forEach(function(provider){ %>
+                      <option name="providerID" value="<%= provider._id%>">
+                        <%= provider.nameprovider%>
+                      </option>
+                      <% }) %>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-3">
+                    <label class="form-control-label">Loại sản phẩm</label>
+                </div>
+                <div class="col-md-9 form-group">
                   <select class="form-control" id="cateID" name="cateID">
-                    <% item.forEach(function(cate){ %>
+                    <option value="">---Chọn---</option>
+                    <% cates.forEach(function(cate){ %>
                       <option name="cateID" value="<%= cate._id%>">
                         <%= cate.namecate%>
                       </option>
@@ -48,13 +87,65 @@
                   </select>
                 </div>
               </div>
-
-              <div class="form-group">
-                <input type="file" name="image" required>
+              <div class="row">
+                <div class="col-md-3">
+                    <label class="form-control-label">Size</label>
+                </div>
+                <div class="col-md-9 form-group">
+                  <select class="form-control selectpicker" id="sizeId" name="sizeId" data-live-search="true"
+                    data-actions-box="true" multiple>
+                      <% sizes.forEach(function(size){ %>
+                        <option name="sizeId" value="<%= size._id%>">
+                          <%= size.size%>
+                        </option>
+                        <% }) %>
+                    </select>
+                </div>
               </div>
-              <br>
-              <button class="btn btn-lg btn-warning btn-block text-uppercase" type="submit"
-                style="width:15%;margin-left: 15%;">Thêm</button>
+              <div class="row">
+                <div class="col-md-3">
+                    <label class="form-control-label">Màu sắc</label>
+                </div>
+                <div class="col-md-9 form-group">
+                  <select class="form-control selectpicker" id="colorId" name="colorId"  data-live-search="true"
+                    data-actions-box="true" multiple>
+                      <% colors.forEach(function(color){ %>
+                        <option name="colorId" value="<%= color._id%>">
+                          <%= color.color%>
+                        </option>
+                        <% }) %>
+                    </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-3">
+                    <label class="form-control-label">Ảnh minh họa</label>
+                </div>
+                <div class="col-md-9 form-group">
+                  <input type="file" name="image" required>
+                </div>
+              </div>
+            </div>
+            <br>
+            <button class="btn btn-lg btn-warning btn-block text-uppercase" type="submit"
+              style="display: block;
+              width: 15%;
+              height: 40px;
+              line-height: 25px;">Thêm</button>
         </form>
     </div>
+    <script>
+      $(document).ready(function() {
+      // Gắn Bootstrap SelectPicker vào các phần tử select có class "selectpicker"
+        $('.selectpicker').selectpicker();
+      });
+    </script>
   </body>
+
+  <style>
+    .selectpicker{
+      border: 1px solid rgb(206, 212, 218);
+      background-color: rgb(255, 255, 255);
+    }
+  </style>
+

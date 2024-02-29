@@ -24,7 +24,7 @@ color.get("/admin/insertcolor", checkadmin, (req, res) => {
 
 color.post("/insertcolor", (req, res) => {
   var color = colors({
-    namecolor: req.body.namecolor,
+    color: req.body.color,
   });
   color.save(function (err, data) {
     if (err) {
@@ -54,7 +54,7 @@ color.post("/updatecolor/:id", (req, res) => {
   colors.updateOne(
     {_id:req.params.id},
     {
-      $set:{namecolor: req.body.namecolor,}
+      $set:{color: req.body.color,}
     },
     function (err) {
       if (err) {

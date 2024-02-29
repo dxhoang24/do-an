@@ -4,6 +4,9 @@ const products = require("../models/products.js");
 var multer = require("multer");
 const { response } = require("express");
 var cates = require("../models/Cate.js");
+var colors = require("../models/colorProduct.js");
+var sizes = require("../models/sizeProduct.js");
+var providers = require("../models/provider.js");
 const cate = require("./cate");
 const exportExcel = require("../libs/export.js")
 
@@ -144,6 +147,7 @@ product.get("/admin/list-product", (req, res) => {
       let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
       let page = req.params.page || 1;
       var message = req.flash("error");
+      
       products
         .find() // find tất cả các data
         .sort({ date: "descending" })
@@ -206,13 +210,23 @@ product.get("/admin/insert-product", (req, res) => {
     user = req.user;
     if (user.role == "admin") {
       var message = req.flash("error");
-      cates.find().then(function (data) {
-        console.log(data);
+      Promise.all([cates.find(), colors.find(), sizes.find(),providers.find()])
+      .then(function (results) {
+        // results là một mảng chứa kết quả của cả ba truy vấn
+        const [catesData, colorsData, sizesData,providersData] = results;
         res.render("admin/insert-product", {
-          item: data,
+          cates: catesData,
+          colors: colorsData,
+          sizes: sizesData,
+          providers: providersData,
           message: message,
           hasErrors: message.length > 0,
         });
+      })
+      .catch(function (error) {
+        console.error("Error:", error);
+        // Xử lý lỗi nếu có
+        res.status(500).send("Internal Server Error");
       });
     } else {
       res.redirect("/home");
@@ -236,6 +250,9 @@ product.post("/insert", (req, res) => {
         image: req.file.filename,
         name: req.body.name,
         cateID: req.body.cateID,
+        providerID: req.body.providerID,
+        sizeId: req.body.sizeId,
+        colorId: req.body.colorId,
         quantity: req.body.quantity,
         note: req.body.note,
         price: req.body.price,
@@ -264,8 +281,8 @@ product.post("/insert", (req, res) => {
                         current: page, // page hiện tại
                         pages: Math.ceil(count / perPage),
                       }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
-                    });
-                  });
+            });
+          });
         }
       });
     }
@@ -276,16 +293,32 @@ product.get("/admin/edit-product/:id", (req, res) => {
     user = req.user;
     if (user.role == "admin") {
       var message = req.flash("error");
-      cates.find().then(function (data) {
-        item = data;
+      Promise.all([cates.find(), colors.find(), sizes.find(), providers.find()])
+      .then(function (results) {
+        // results là một mảng chứa kết quả của cả bốn truy vấn
+        const [catesData, colorsData, sizesData, providersData] = results;
+        const cates = catesData;
+        const colors = colorsData;
+        const sizes = sizesData;
+        const providers = providersData;
 
+        // Sau khi xử lý dữ liệu từ các truy vấn, bạn có thể tiếp tục xử lý hoặc gọi res.render()
         products.findById(req.params.id, function (err, data) {
           res.render("admin/edit-product", {
             danhsach: data,
+            cates: cates, // Chuyển dữ liệu đã xử lý vào template
+            colors: colors,
+            sizes: sizes,
+            providers: providers,
             message: message,
             hasErrors: message.length > 0,
           });
         });
+      })
+      .catch(function (error) {
+        console.error("Error:", error);
+        // Xử lý lỗi nếu có
+        res.status(500).send("Internal Server Error");
       });
     } else {
       res.redirect("/home");
@@ -304,12 +337,17 @@ product.post("/edit-product", (req, res) => {
           products.updateOne(
             { _id: req.body.id },
             {
-              name: req.body.name,
-              quantity: req.body.quantity,
-              note: req.body.note,
-              namecate: req.body.namecate,
-              price: req.body.price,
-              date: Date.now(),
+              $set:{
+                name: req.body.name,
+                cateID: req.body.cateID,
+                providerID: req.body.providerID,
+                sizeId: req.body.sizeId,
+                colorId: req.body.colorId,
+                quantity: req.body.quantity,
+                note: req.body.note,
+                price: req.body.price,
+                date: Date.now(),
+              }
             },
             function (err) {
               if (err) {
@@ -347,9 +385,12 @@ product.post("/edit-product", (req, res) => {
               {
                 image: req.file.filename,
                 name: req.body.name,
+                cateID: req.body.cateID,
+                providerID: req.body.providerID,
+                sizeId: req.body.sizeId,
+                colorId: req.body.colorId,
                 quantity: req.body.quantity,
                 note: req.body.note,
-
                 price: req.body.price,
                 date: Date.now(),
               },

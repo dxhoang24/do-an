@@ -24,7 +24,7 @@ size.get("/admin/insertsize", checkadmin, (req, res) => {
 
 size.post("/insertsize", (req, res) => {
   var size = sizes({
-    namesize: req.body.namesize,
+    size: req.body.size,
   });
   size.save(function (err, data) {
     if (err) {
@@ -54,7 +54,7 @@ size.post("/updatesize/:id", (req, res) => {
   sizes.updateOne(
     {_id:req.params.id},
     {
-      $set:{namesize: req.body.namesize,}
+      $set:{size: req.body.size,}
     },
     function (err) {
       if (err) {
