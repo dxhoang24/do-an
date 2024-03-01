@@ -8,7 +8,7 @@ var colors = require("../models/colorProduct.js");
 var sizes = require("../models/sizeProduct.js");
 var providers = require("../models/provider.js");
 const cate = require("./cate");
-const exportExcel = require("../libs/export.js")
+const exportExcel = require("../libs/export.js");
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -95,48 +95,78 @@ product.get("/product/:page", (req, res) => {
 
     let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
     let page = req.params.page || 1;
-    cates.find().then(function (data) {
-      item = data;
-      products
-        .find() // find tất cả các data
-        .sort({ date: "descending" })
-        .skip(perPage * page - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
-        .limit(perPage)
-        .exec((err, data) => {
-          products.countDocuments((err, count) => {
-            // đếm để tính có bao nhiêu trang
-            if (err) return next(err);
-            res.render("user/product", {
-              danhsach: data,
-              current: page, // page hiện tại
-              pages: Math.ceil(count / perPage),
-            }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
+    Promise.all([cates.find(), colors.find(), sizes.find(), providers.find()])
+      .then(function (results) {
+        // results là một mảng chứa kết quả của cả ba truy vấn
+        const [catesData, colorsData, sizesData, providersData] = results;
+        const cates = catesData;
+        const colors = colorsData;
+        const sizes = sizesData;
+        const providers = providersData;
+        products
+          .find() // find tất cả các data
+          .sort({ date: "descending" })
+          .skip(perPage * page - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
+          .limit(perPage)
+          .exec((err, data) => {
+            products.countDocuments((err, count) => {
+              // đếm để tính có bao nhiêu trang
+              if (err) return next(err);
+              res.render("user/product", {
+                danhsach: data,
+                cates: cates, // Chuyển dữ liệu đã xử lý vào template
+                colors: colors,
+                sizes: sizes,
+                providers: providers,
+                current: page, // page hiện tại
+                pages: Math.ceil(count / perPage),
+              }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
+            });
           });
-        });
-    });
+      })
+      .catch(function (error) {
+        console.error("Error:", error);
+        // Xử lý lỗi nếu có
+        res.status(500).send("Internal Server Error");
+      });
   } else {
     user = null;
     let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
     let page = req.params.page || 1;
-    cates.find().then(function (data) {
-      item = data;
-      products
-        .find() // find tất cả các data
-        .sort({ date: "descending" })
-        .skip(perPage * page - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
-        .limit(perPage)
-        .exec((err, data) => {
-          products.countDocuments((err, count) => {
-            // đếm để tính có bao nhiêu trang
-            if (err) return next(err);
-            res.render("user/product", {
-              danhsach: data,
-              current: page, // page hiện tại
-              pages: Math.ceil(count / perPage),
-            }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
+    Promise.all([cates.find(), colors.find(), sizes.find(), providers.find()])
+      .then(function (results) {
+        // results là một mảng chứa kết quả của cả ba truy vấn
+        const [catesData, colorsData, sizesData, providersData] = results;
+        const cates = catesData;
+        const colors = colorsData;
+        const sizes = sizesData;
+        const providers = providersData;
+        products
+          .find() // find tất cả các data
+          .sort({ date: "descending" })
+          .skip(perPage * page - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
+          .limit(perPage)
+          .exec((err, data) => {
+            products.countDocuments((err, count) => {
+              // đếm để tính có bao nhiêu trang
+              if (err) return next(err);
+              res.render("user/product", {
+                danhsach: data,
+                cates: cates, // Chuyển dữ liệu đã xử lý vào template
+                colors: colors,
+                sizes: sizes,
+                providers: providers,
+                current: page, // page hiện tại
+                pages: Math.ceil(count / perPage),
+              }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
+            });
           });
-        });
-    });
+      })
+      .catch(function (error) {
+        console.error("Error:", error);
+        // Xử lý lỗi nếu có
+        res.status(500).send("Internal Server Error");
+      });
   }
 });
 
@@ -147,24 +177,41 @@ product.get("/admin/list-product", (req, res) => {
       let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
       let page = req.params.page || 1;
       var message = req.flash("error");
-      
-      products
-        .find() // find tất cả các data
-        .sort({ date: "descending" })
-        .skip(perPage * page - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
-        .limit(perPage)
-        .exec((err, data) => {
-          products.countDocuments((err, count) => {
-            // đếm để tính có bao nhiêu trang
-            if (err) return next(err);
 
-            res.render("admin/list-product", {
-              danhsach: data,
-              message: message,
-              current: page, // page hiện tại
-              pages: Math.ceil(count / perPage),
-            }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
-          });
+      Promise.all([cates.find(), colors.find(), sizes.find(), providers.find()])
+        .then(function (results) {
+          // results là một mảng chứa kết quả của cả ba truy vấn
+          const [catesData, colorsData, sizesData, providersData] = results;
+          const cates = catesData;
+          const colors = colorsData;
+          const sizes = sizesData;
+          const providers = providersData;
+          products
+            .find() // find tất cả các data
+            .sort({ date: "descending" })
+            .skip(perPage * page - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
+            .limit(perPage)
+            .exec((err, data) => {
+              products.countDocuments((err, count) => {
+                // đếm để tính có bao nhiêu trang
+                if (err) return next(err);
+                res.render("admin/list-product", {
+                  danhsach: data,
+                  cates: cates, // Chuyển dữ liệu đã xử lý vào template
+                  colors: colors,
+                  sizes: sizes,
+                  providers: providers,
+                  message: message,
+                  current: page, // page hiện tại
+                  pages: Math.ceil(count / perPage),
+                }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
+              });
+            });
+        })
+        .catch(function (error) {
+          console.error("Error:", error);
+          // Xử lý lỗi nếu có
+          res.status(500).send("Internal Server Error");
         });
     } else {
       res.redirect("/home");
@@ -180,22 +227,40 @@ product.get("/admin/list-product/:page", (req, res) => {
       let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
       let page = req.params.page || 1;
       var message = req.flash("error");
-      products
-        .find() // find tất cả các data
-        .sort({ date: "descending" })
-        .skip(perPage * page - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
-        .limit(perPage)
-        .exec((err, data) => {
-          products.countDocuments((err, count) => {
-            // đếm để tính có bao nhiêu trang
-            if (err) return next(err);
-            res.render("admin/list-product", {
-              danhsach: data,
-              message: message,
-              current: page, // page hiện tại
-              pages: Math.ceil(count / perPage),
-            }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
-          });
+      Promise.all([cates.find(), colors.find(), sizes.find(), providers.find()])
+        .then(function (results) {
+          // results là một mảng chứa kết quả của cả ba truy vấn
+          const [catesData, colorsData, sizesData, providersData] = results;
+          const cates = catesData;
+          const colors = colorsData;
+          const sizes = sizesData;
+          const providers = providersData;
+          products
+            .find() // find tất cả các data
+            .sort({ date: "descending" })
+            .skip(perPage * page - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
+            .limit(perPage)
+            .exec((err, data) => {
+              products.countDocuments((err, count) => {
+                // đếm để tính có bao nhiêu trang
+                if (err) return next(err);
+                res.render("admin/list-product", {
+                  danhsach: data,
+                  message: message,
+                  cates: cates, // Chuyển dữ liệu đã xử lý vào template
+                  colors: colors,
+                  sizes: sizes,
+                  providers: providers,
+                  current: page, // page hiện tại
+                  pages: Math.ceil(count / perPage),
+                }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
+              });
+            });
+        })
+        .catch(function (error) {
+          console.error("Error:", error);
+          // Xử lý lỗi nếu có
+          res.status(500).send("Internal Server Error");
         });
     } else {
       res.redirect("/home");
@@ -210,24 +275,24 @@ product.get("/admin/insert-product", (req, res) => {
     user = req.user;
     if (user.role == "admin") {
       var message = req.flash("error");
-      Promise.all([cates.find(), colors.find(), sizes.find(),providers.find()])
-      .then(function (results) {
-        // results là một mảng chứa kết quả của cả ba truy vấn
-        const [catesData, colorsData, sizesData,providersData] = results;
-        res.render("admin/insert-product", {
-          cates: catesData,
-          colors: colorsData,
-          sizes: sizesData,
-          providers: providersData,
-          message: message,
-          hasErrors: message.length > 0,
+      Promise.all([cates.find(), colors.find(), sizes.find(), providers.find()])
+        .then(function (results) {
+          // results là một mảng chứa kết quả của cả ba truy vấn
+          const [catesData, colorsData, sizesData, providersData] = results;
+          res.render("admin/insert-product", {
+            cates: catesData,
+            colors: colorsData,
+            sizes: sizesData,
+            providers: providersData,
+            message: message,
+            hasErrors: message.length > 0,
+          });
+        })
+        .catch(function (error) {
+          console.error("Error:", error);
+          // Xử lý lỗi nếu có
+          res.status(500).send("Internal Server Error");
         });
-      })
-      .catch(function (error) {
-        console.error("Error:", error);
-        // Xử lý lỗi nếu có
-        res.status(500).send("Internal Server Error");
-      });
     } else {
       res.redirect("/home");
     }
@@ -263,26 +328,48 @@ product.post("/insert", (req, res) => {
           res.render("admin/insert-product", { message: "Lỗi tải lên!!!" });
         } else {
           // res.redirect("/admin/list-product",);
-                let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
-                let page = req.params.page || 1;
-
-                products
-                  .find() // find tất cả các data
-                  .sort({ date: "descending" })
-                  .skip(perPage * page - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
-                  .limit(perPage)
-                  .exec((err, data) => {
-                    products.countDocuments((err, count) => {
-                      // đếm để tính có bao nhiêu trang
-                      if (err) return next(err);
-                      res.render("admin/list-product", {
-                        danhsach: data,
-                        message: "Thêm mới thành công",
-                        current: page, // page hiện tại
-                        pages: Math.ceil(count / perPage),
-                      }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
+          let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
+          let page = req.params.page || 1;
+          Promise.all([
+            cates.find(),
+            colors.find(),
+            sizes.find(),
+            providers.find(),
+          ])
+            .then(function (results) {
+              // results là một mảng chứa kết quả của cả ba truy vấn
+              const [catesData, colorsData, sizesData, providersData] = results;
+              const cates = catesData;
+              const colors = colorsData;
+              const sizes = sizesData;
+              const providers = providersData;
+              products
+                .find() // find tất cả các data
+                .sort({ date: "descending" })
+                .skip(perPage * page - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
+                .limit(perPage)
+                .exec((err, data) => {
+                  products.countDocuments((err, count) => {
+                    // đếm để tính có bao nhiêu trang
+                    if (err) return next(err);
+                    res.render("admin/list-product", {
+                      danhsach: data,
+                      message: "Thêm mới thành công",
+                      cates: cates, // Chuyển dữ liệu đã xử lý vào template
+                      colors: colors,
+                      sizes: sizes,
+                      providers: providers,
+                      current: page, // page hiện tại
+                      pages: Math.ceil(count / perPage),
+                    }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
+                  });
+                });
+            })
+            .catch(function (error) {
+              console.error("Error:", error);
+              // Xử lý lỗi nếu có
+              res.status(500).send("Internal Server Error");
             });
-          });
         }
       });
     }
@@ -294,32 +381,32 @@ product.get("/admin/edit-product/:id", (req, res) => {
     if (user.role == "admin") {
       var message = req.flash("error");
       Promise.all([cates.find(), colors.find(), sizes.find(), providers.find()])
-      .then(function (results) {
-        // results là một mảng chứa kết quả của cả bốn truy vấn
-        const [catesData, colorsData, sizesData, providersData] = results;
-        const cates = catesData;
-        const colors = colorsData;
-        const sizes = sizesData;
-        const providers = providersData;
+        .then(function (results) {
+          // results là một mảng chứa kết quả của cả bốn truy vấn
+          const [catesData, colorsData, sizesData, providersData] = results;
+          const cates = catesData;
+          const colors = colorsData;
+          const sizes = sizesData;
+          const providers = providersData;
 
-        // Sau khi xử lý dữ liệu từ các truy vấn, bạn có thể tiếp tục xử lý hoặc gọi res.render()
-        products.findById(req.params.id, function (err, data) {
-          res.render("admin/edit-product", {
-            danhsach: data,
-            cates: cates, // Chuyển dữ liệu đã xử lý vào template
-            colors: colors,
-            sizes: sizes,
-            providers: providers,
-            message: message,
-            hasErrors: message.length > 0,
+          // Sau khi xử lý dữ liệu từ các truy vấn, bạn có thể tiếp tục xử lý hoặc gọi res.render()
+          products.findById(req.params.id, function (err, data) {
+            res.render("admin/edit-product", {
+              danhsach: data,
+              cates: cates, // Chuyển dữ liệu đã xử lý vào template
+              colors: colors,
+              sizes: sizes,
+              providers: providers,
+              message: message,
+              hasErrors: message.length > 0,
+            });
           });
+        })
+        .catch(function (error) {
+          console.error("Error:", error);
+          // Xử lý lỗi nếu có
+          res.status(500).send("Internal Server Error");
         });
-      })
-      .catch(function (error) {
-        console.error("Error:", error);
-        // Xử lý lỗi nếu có
-        res.status(500).send("Internal Server Error");
-      });
     } else {
       res.redirect("/home");
     }
@@ -337,7 +424,7 @@ product.post("/edit-product", (req, res) => {
           products.updateOne(
             { _id: req.body.id },
             {
-              $set:{
+              $set: {
                 name: req.body.name,
                 cateID: req.body.cateID,
                 providerID: req.body.providerID,
@@ -347,7 +434,7 @@ product.post("/edit-product", (req, res) => {
                 note: req.body.note,
                 price: req.body.price,
                 date: Date.now(),
-              }
+              },
             },
             function (err) {
               if (err) {
@@ -355,23 +442,46 @@ product.post("/edit-product", (req, res) => {
               } else {
                 let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
                 let page = req.params.page || 1;
-
-                products
-                  .find() // find tất cả các data
-                  .sort({ date: "descending" })
-                  .skip(perPage * page - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
-                  .limit(perPage)
-                  .exec((err, data) => {
-                    products.countDocuments((err, count) => {
-                      // đếm để tính có bao nhiêu trang
-                      if (err) return next(err);
-                      res.render("admin/list-product", {
-                        danhsach: data,
-                        message: "Cập nhật thành công",
-                        current: page, // page hiện tại
-                        pages: Math.ceil(count / perPage),
-                      }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
-                    });
+                Promise.all([
+                  cates.find(),
+                  colors.find(),
+                  sizes.find(),
+                  providers.find(),
+                ])
+                  .then(function (results) {
+                    // results là một mảng chứa kết quả của cả ba truy vấn
+                    const [catesData, colorsData, sizesData, providersData] =
+                      results;
+                    const cates = catesData;
+                    const colors = colorsData;
+                    const sizes = sizesData;
+                    const providers = providersData;
+                    products
+                      .find() // find tất cả các data
+                      .sort({ date: "descending" })
+                      .skip(perPage * page - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
+                      .limit(perPage)
+                      .exec((err, data) => {
+                        products.countDocuments((err, count) => {
+                          // đếm để tính có bao nhiêu trang
+                          if (err) return next(err);
+                          res.render("admin/list-product", {
+                            danhsach: data,
+                            message: "Cập nhật thành công",
+                            cates: cates, // Chuyển dữ liệu đã xử lý vào template
+                            colors: colors,
+                            sizes: sizes,
+                            providers: providers,
+                            current: page, // page hiện tại
+                            pages: Math.ceil(count / perPage),
+                          }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
+                        });
+                      });
+                  })
+                  .catch(function (error) {
+                    console.error("Error:", error);
+                    // Xử lý lỗi nếu có
+                    res.status(500).send("Internal Server Error");
                   });
               }
             }
@@ -401,22 +511,46 @@ product.post("/edit-product", (req, res) => {
                   let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
                   let page = req.params.page || 1;
 
-                  products
-                    .find() // find tất cả các data
-                    .sort({ date: "descending" })
-                    .skip(perPage * page - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
-                    .limit(perPage)
-                    .exec((err, data) => {
-                      products.countDocuments((err, count) => {
-                        // đếm để tính có bao nhiêu trang
-                        if (err) return next(err);
-                        res.render("admin/list-product", {
-                          danhsach: data,
-                          message: "Cập nhật thành công",
-                          current: page, // page hiện tại
-                          pages: Math.ceil(count / perPage),
-                        }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
-                      });
+                  Promise.all([
+                    cates.find(),
+                    colors.find(),
+                    sizes.find(),
+                    providers.find(),
+                  ])
+                    .then(function (results) {
+                      // results là một mảng chứa kết quả của cả ba truy vấn
+                      const [catesData, colorsData, sizesData, providersData] =
+                        results;
+                      const cates = catesData;
+                      const colors = colorsData;
+                      const sizes = sizesData;
+                      const providers = providersData;
+                      products
+                        .find() // find tất cả các data
+                        .sort({ date: "descending" })
+                        .skip(perPage * page - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
+                        .limit(perPage)
+                        .exec((err, data) => {
+                          products.countDocuments((err, count) => {
+                            // đếm để tính có bao nhiêu trang
+                            if (err) return next(err);
+                            res.render("admin/list-product", {
+                              danhsach: data,
+                              message: "Cập nhật thành công",
+                              cates: cates, // Chuyển dữ liệu đã xử lý vào template
+                              colors: colors,
+                              sizes: sizes,
+                              providers: providers,
+                              current: page, // page hiện tại
+                              pages: Math.ceil(count / perPage),
+                            }); // Trả về dữ liệu các sản phẩm theo định dạng như JSON, XML,...
+                          });
+                        });
+                    })
+                    .catch(function (error) {
+                      console.error("Error:", error);
+                      // Xử lý lỗi nếu có
+                      res.status(500).send("Internal Server Error");
                     });
                 }
               }
@@ -469,29 +603,84 @@ product.post("/Search", (req, res) => {
     user = req.user;
     if (user.role == "admin") {
       let name = new RegExp(req.body.name, "i");
-      cates.find().then(function (data) {
-        item = data;
-        products
-          .find({
-            name: name,
-          })
-          .limit(12)
-          .then((data) => {
-            res.render("admin/Search_product", {
-              danhsach: data,
+      Promise.all([cates.find(), colors.find(), sizes.find(), providers.find()])
+        .then(function (results) {
+          // results là một mảng chứa kết quả của cả ba truy vấn
+          const [catesData, colorsData, sizesData, providersData] = results;
+          const cates = catesData;
+          const colors = colorsData;
+          const sizes = sizesData;
+          const providers = providersData;
+          products
+            .find({
+              name: name,
+            })
+            .limit(12)
+            .then((data) => {
+              res.render("admin/Search_product", {
+                danhsach: data,
+                cates: cates, // Chuyển dữ liệu đã xử lý vào template
+                colors: colors,
+                sizes: sizes,
+                providers: providers,
+              });
+              // console.log(data)
+            })
+            .catch((err) => {
+              console.log(err);
             });
-            // console.log(data)
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      });
+        })
+        .catch(function (error) {
+          console.error("Error:", error);
+          // Xử lý lỗi nếu có
+          res.status(500).send("Internal Server Error");
+        });
     } else {
       let name = new RegExp(req.body.name, "i");
 
-      cates.find().then(function (data) {
-        item = data;
-
+      Promise.all([cates.find(), colors.find(), sizes.find(), providers.find()])
+        .then(function (results) {
+          // results là một mảng chứa kết quả của cả ba truy vấn
+          const [catesData, colorsData, sizesData, providersData] = results;
+          const cates = catesData;
+          const colors = colorsData;
+          const sizes = sizesData;
+          const providers = providersData;
+          products
+            .find({
+              name: name,
+            })
+            .limit(12)
+            .then((data) => {
+              res.render("user/Search_product", {
+                danhsach: data,
+                cates: cates, // Chuyển dữ liệu đã xử lý vào template
+                colors: colors,
+                sizes: sizes,
+                providers: providers,
+              });
+              // console.log(data)
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        })
+        .catch(function (error) {
+          console.error("Error:", error);
+          // Xử lý lỗi nếu có
+          res.status(500).send("Internal Server Error");
+        });
+    }
+  } else {
+    let name = req.body.name;
+    Promise.all([cates.find(), colors.find(), sizes.find(), providers.find()])
+      .then(function (results) {
+        // results là một mảng chứa kết quả của cả ba truy vấn
+        const [catesData, colorsData, sizesData, providersData] = results;
+        const cates = catesData;
+        const colors = colorsData;
+        const sizes = sizesData;
+        const providers = providersData;
         products
           .find({
             name: name,
@@ -500,53 +689,88 @@ product.post("/Search", (req, res) => {
           .then((data) => {
             res.render("user/Search_product", {
               danhsach: data,
+              cates: cates, // Chuyển dữ liệu đã xử lý vào template
+              colors: colors,
+              sizes: sizes,
+              providers: providers,
             });
             // console.log(data)
           })
           .catch((err) => {
             console.log(err);
           });
+      })
+      .catch(function (error) {
+        console.error("Error:", error);
+        // Xử lý lỗi nếu có
+        res.status(500).send("Internal Server Error");
       });
-    }
-  } else {
-    let name = req.body.name;
-    cates.find().then(function (data) {
-      item = data;
-
-      products
-        .find({
-          name: { $regex: name, $options:"i" },
-        })
-        .limit(12)
-        .then((data) => {
-          res.render("user/Search_product", {
-            danhsach: data,
-          });
-          // console.log(data)
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    });
   }
 });
 
-product.get("/download",async (req, res) => {
+product.get("/download", async (req, res) => {
+  try {
+    let [cates, colors, sizes] = await Promise.all([
+      cates.find(),
+      colors.find(),
+      sizes.find(),
+    ]);
 
-  let data = await products.find()
-  console.log("data",data);
-  let excel = {
-    fileName: 'Danhsachsanpham_',
-    title: 'Danh sách sản phẩm',
-    titleHeadTable: [
-        { key: 'name', value: 'Tên sản phẩm' },
-        { key: 'note', value: 'Mô tả'},
-        { key: 'quantity', value: 'Số lượng'},
-        { key: 'price', value: 'Đơn giá' }
-    ],
-    valueWidthColumn: [50, 50 , 50, 50]
+    const productsData = await products.find();
+
+    const data = productsData.map(function (product) {
+      let cateName;
+      cates.forEach(function (cate) {
+        if (product.cateID == cate._id) {
+          cateName = cate.namecate;
+        }
+      });
+
+      let colorNames = [];
+      colors.forEach(function (color) {
+        if (product.colorId.includes(color._id)) {
+          colorNames.push(color.color);
+        }
+      });
+
+      let sizeNames = [];
+      sizes.forEach(function (size) {
+        if (product.sizeId.includes(size._id)) {
+          sizeNames.push(size.size);
+        }
+      });
+
+      return {
+        cate: cateName,
+        name: product.name,
+        color: colorNames.length > 0 ? colorNames.join() : "",
+        size: sizeNames.length > 0 ? sizeNames.join() : "",
+        note: product.note,
+        quantity: product.quantity,
+        price: product.price,
+      };
+    });
+
+    let excel = {
+      fileName: "Danhsachsanpham_",
+      title: "Danh sách sản phẩm",
+      titleHeadTable: [
+        { key: "cate", value: "Loại sản phẩm" },
+        { key: "name", value: "Tên sản phẩm" },
+        { key: "color", value: "Màu sắc" },
+        { key: "size", value: "Size" },
+        { key: "note", value: "Mô tả" },
+        { key: "quantity", value: "Số lượng" },
+        { key: "price", value: "Đơn giá" },
+      ],
+      valueWidthColumn: [50, 100, 50, 50, 100, 50, 50],
+    };
+
+    exportExcel.exportExcel(data, excel, res, req);
+  } catch (error) {
+    console.error("Error:", error);
+    // Xử lý lỗi nếu có
   }
-  exportExcel.exportExcel(data, excel, res, req);
-})
+});
 
 module.exports = product;

@@ -9,7 +9,11 @@
         <!-- <div class="page-header text-center">
         <h1><span class="fa fa-anchor"></span> Thông tin tài khoản</h1>
     </div> -->
-
+    <%
+      function listSize(data){
+        
+      }
+    %>
 
         <div class="profile">
           <div class="header py-3">
@@ -38,6 +42,7 @@
             <div class="row">
               <table>
                 <thead class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <th>Loại sản phẩm</th>
                   <th>Tên</th>
                   <th>Hình ảnh</th>
                   <th>Màu sắc</th>
@@ -52,10 +57,31 @@
                 <tbody>
                   <% danhsach.forEach(function(product){ %>
                     <tr class="text-center">
+                      <td>
+                        <% cates.forEach(function(cate){ %>
+                          <% if (product.cateID == cate._id) { %>
+                              <%= cate.namecate %>
+                          <% } %>
+                        <% }) %>
+                      </td>
                       <td class="text-left"><%- product.name %></td>
                       <td>
                         <img class="" src="/upload/<%- product.image %>" alt="<%- product.name %>"
                           style="padding-right: 6%; width: 80px; height: 80px;" />
+                      </td>
+                      <td>
+                        <% colors.forEach(function(color){ %>
+                          <% if (product.colorId.includes(color._id)) { %>
+                              <div><%= color.color %></div>
+                          <% } %>
+                        <% }) %>
+                      </td>
+                      <td>
+                          <% sizes.forEach(function(size){ %>
+                            <% if (product.sizeId.includes(size._id)) { %>
+                                <div><%= size.size %></div>
+                            <% } %>
+                          <% }) %>
                       </td>
                       <td class="text-left"><%- product.note %></td>
                       <td><%- product.quantity %></td>

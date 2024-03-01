@@ -25,21 +25,23 @@ cart.get("/shopping-cart", function (req, res) {
   res.render("user/cart", { data: data });
 });
 
-cart.get("/add-to-cart/:id", function (req, res) {
+cart.post("/add-to-cart/:id", function (req, res) {
   var id = req.params.id;
-
+  let count=1
+  console.log("giỏ hàng 1", giohang);
+  console.log("req.session.cart", req.session.cart);
   var giohang = new GioHang(
     req.session.cart ? req.session.cart : { items: {} }
   );
-
+  let type = req.body
   products.findById(id).then(function (data) {
-    giohang.add(id, data);
+    giohang.add(id, data,type);
     req.session.cart = giohang;
     res.redirect("/shopping-cart");
   });
 });
 cart.get("/order", function (req, res) {
-  var giohang = new GioHang(
+  var giohang = new GioHang(  
     req.session.cart ? req.session.cart : { items: {} }
   );
 
