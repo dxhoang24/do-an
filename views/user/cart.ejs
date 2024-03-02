@@ -12,6 +12,8 @@
             <tr class="text-center">
               <th>Ảnh</th>
               <th>Tên sản phẩm</th>
+              <th>Màu sắc</th>
+              <th>Size</th>
               <th>Đơn giá</th>
               <th>Số lượng</th>
               <th>Thành tiền</th>
@@ -22,15 +24,20 @@
                     href="/chi-tiet/<%= item.item.nameKhongDau%>.<%= item.item._id%>.<%= item.item.cateId%>.html"><img
                       title="product" alt="product" src="/upload/<%= item.item.image%>" height="100" width="200"></a>
                 </td>
-                <td><a href="/chi-tiet/<%= item.item.nameKhongDau%>.<%= item.item._id%>.<%= item.item.cateId%>.html">
+                <td class="align-middle">
                     <%= item.item.name%>
-                  </a></td>
-
-                <td>
+                </td>
+                <td class="align-middle">
+                  <%= item.color %>
+                </td>
+                <td class="align-middle">
+                  <%= item.size %>
+                </td>
+                <td class="align-middle">
                   <%= item.item.price%> VNĐ
                 </td>
 
-                <td>
+                <td class="align-middle">
                   <span>
                     <input 
                         id="<%= item.item._id%>" 
@@ -45,11 +52,11 @@
                   <span id="maxErrorMessage-<%= index%>" style="color: red; margin-top: 20px;"></span>
                 </td>
 
-                <td id="total-<%= index %>">
+                <td class="align-middle" id="total-<%= index %>">
                   <%= item.price%> VNĐ
                 </td>
-                <td>
-                  <a href="/delCart2/<%= item.item._id %>" style="color: red;"> <i class="fas fa-times"></i></a>
+                <td class="align-middle">
+                  <a href="/delCart2/<%= item.productId %>" style="color: red;"> <i class="fas fa-times"></i></a>
                 </td>
               </tr>
 
@@ -106,7 +113,6 @@
       }
       function updateCart() {
         const requestData = data
-        // Sử dụng fetch để gọi API với phương thức POST
         fetch('/updateCart2', {
           method: 'POST',
           headers: {

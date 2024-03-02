@@ -3,28 +3,16 @@ function GioHang(oldCart) {
   this.TotalPrice = oldCart.TotalPrice || 0;
   this.TotalQty = oldCart.TotalQty || 0;
 
-  this.add = function (id, item, type) {
+  this.add = function (id, item, type,productId) {
     console.log("vào đây không");
-    var giohang = this.items[id];
+    var giohang = this.items[productId];
     if (!giohang) {
-      giohang = this.items[id] = { item: item, qty: 0, price: 0,size:'',color:"" };
+      giohang = this.items[productId] = { item: item, qty: 0, price: 0,size:'',color:"", productId:productId };
     }
-    if(giohang.size==type.size && giohang.color==type.color){
-      console.log("vào đây không 1");
-      giohang.qty++;
-      giohang.price = giohang.qty * giohang.item.price;
-    }else{
-      console.log("vào đây không 2");
-
-      giohang.qty++;
-      giohang.color = type.color
-      giohang.size = type.size
-      giohang.price = giohang.qty * giohang.item.price;
-    }
-    console.log("giỏ hàng 12",giohang);
-    
-    
-
+    giohang.qty++;
+    giohang.color = type.color
+    giohang.size = type.size
+    giohang.price = giohang.qty * giohang.item.price;    
     this.TotalPrice += parseFloat(giohang.price);
     this.TotalQty++;
     console.log("giỏ hàng 2",giohang);
@@ -52,7 +40,7 @@ function GioHang(oldCart) {
     let total = 0
     console.log("vào đây không thế");
     data.forEach(element => {
-      var giohang = this.items[element.item._id]
+      var giohang = this.items[element.productId]
       giohang.qty = element.qty;
       giohang.price = element.price;
       total += parseFloat(giohang.price);

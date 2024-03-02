@@ -12,6 +12,7 @@ router.get("/home",async function (req, res, next) {
     user = req.user;
     if (user.role == "admin") {
       let arrCart = await Cart.find()
+      
       userModel.find({ role: "user" }).then(function (data) {
         listuser = data;
         listCart= arrCart

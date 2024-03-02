@@ -23,27 +23,35 @@
 
                   <th>ID</th>
                   <th>Name</th>
-                  <th>Hình</th>
+                  <th>Hình ảnh</th>
+                  <th>Màu sắc</th>
+                  <th>Size</th>
                   <th>Số Lượng</th>
-                  <th>Tiền</th>
+                  <th>Thành tiền</th>
 
                 </tr>
                 <tbody>
                   <% var id=0; var total=0 %>
                     <% cart.cart.forEach(function(item){ id ++; total +=item.price;%>
                       <tr>
-                        <td>
+                        <td class="align-middle">
                           <%= id%>
                         </td>
-                        <td>
+                        <td class="align-middle">
                           <%= item.item.name%>
                         </td>
-                        <td> <img src="/upload/<%= item.item.image%>" width="150px" alt=""></td>
-                        <td>
+                        <td class="align-middle"> <img src="/upload/<%= item.item.image%>" width="150px" alt=""></td>
+                        <td class="align-middle">
+                          <%= item.color %>
+                        </td>
+                        <td class="align-middle">
+                          <%= item.size %>
+                        </td>
+                        <td class="align-middle">
                           <%= item.qty%>
                         </td>
 
-                        <td>
+                        <td class="align-middle">
                           <%= item.price%>
                         </td>
                       </tr>

@@ -3,6 +3,7 @@ var cart = express.Router();
 var GioHang = require("../models/giohang.js");
 var Cart = require("../models/Cart.js");
 var products = require("../models/products.js");
+const { v4: uuidv4 } = require('uuid');
 var countJson = function (json) {
   var count = 0;
   for (var id in json) {
@@ -27,18 +28,16 @@ cart.get("/shopping-cart", function (req, res) {
 
 cart.post("/add-to-cart/:id", function (req, res) {
   var id = req.params.id;
-  let count=1
-  console.log("giỏ hàng 1", giohang);
-  console.log("req.session.cart", req.session.cart);
+  let type = req.body
+  let productId = `${id}_${type.size}_${type.color}`
   var giohang = new GioHang(
     req.session.cart ? req.session.cart : { items: {} }
   );
-  let type = req.body
   products.findById(id).then(function (data) {
-    giohang.add(id, data,type);
-    req.session.cart = giohang;
-    res.redirect("/shopping-cart");
-  });
+      giohang.add(id, data,type,productId);
+      req.session.cart = giohang;
+      res.redirect("/shopping-cart");
+    });  
 });
 cart.get("/order", function (req, res) {
   var giohang = new GioHang(  
@@ -198,10 +197,19 @@ cart.get("/xoa/:id", function (req, res) {
 });
 async function updateProductQuantities(data) {
   try {
-    for (const el of data) {
+    const quantityById = {};
+    data.forEach(product => {
+      if (quantityById[product.item._id]) {
+        quantityById[product.item._id] += Number(product.qty);
+      } else {
+        quantityById[product.item._id] = Number(product.qty);
+      }
+    });
+    const result = Object.entries(quantityById).map(([id, quantity]) => ({ id: id, quantity }));
+    for (const el of result) {
       console.log("ekl", el);
-      let num =  Number(el.qty);
-      await products.findByIdAndUpdate(el.item._id, { $inc: { quantity: -num } });
+      let num =  Number(el.quantity);
+      await products.findByIdAndUpdate(el.id, { $inc: { quantity: -num } });
     }
     console.log("Update successful!");
   } catch (error) {
