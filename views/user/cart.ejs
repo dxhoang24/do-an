@@ -72,8 +72,8 @@
                 </span></td>
               </tr>
             </table>
-            <a href="/order" class="btn btn-success" style="float: right; margin-left:10px" onclick="updateCart()">Đặt Hàng</a>
-            <a href="/product" class="btn btn-primary" style="float: right;" onclick="updateCart()">Mua thêm sản phẩm</a>
+            <a href="/order" class="btn btn-success" style="float: right; margin-left:10px">Đặt Hàng</a>
+            <a href="/product" class="btn btn-primary" style="float: right;">Mua thêm sản phẩm</a>
           </div>
         </div>
       </div>
@@ -111,8 +111,10 @@
         document.getElementById('totalamout').textContent = total + ' VNĐ'
 
       }
-      function updateCart() {
+      
+      document.addEventListener('click', function(event) {
         const requestData = data
+        console.log("vào đây kh");
         fetch('/updateCart2', {
           method: 'POST',
           headers: {
@@ -120,10 +122,25 @@
             // Bạn cũng có thể thêm các header khác tùy theo yêu cầu của API
           },
           body: JSON.stringify(requestData)
-        })
+          })
           .then(response => response.json())
           .catch(error => {
-            console.error('Error calling API:', error);
+              console.error('Error calling API:', error);
           });
-      }
+      });
+      // function updateCart() {
+      //   const requestData = data
+      //   fetch('/updateCart2', {
+      //     method: 'POST',
+      //     headers: {
+      //       'Content-Type': 'application/json'
+      //       // Bạn cũng có thể thêm các header khác tùy theo yêu cầu của API
+      //     },
+      //     body: JSON.stringify(requestData)
+      //   })
+      //     .then(response => response.json())
+      //     .catch(error => {
+      //       console.error('Error calling API:', error);
+      //     });
+      // }
     </script>

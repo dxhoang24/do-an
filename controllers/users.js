@@ -1,4 +1,6 @@
 var express = require("express");
+const moment = require('moment')
+
 var router = express.Router();
 const { check, validationResult } = require("express-validator");
 var passport = require("passport");
@@ -11,18 +13,61 @@ router.get("/home",async function (req, res, next) {
   if (req.session.loggin) {
     user = req.user;
     if (user.role == "admin") {
-      let arrCart = await Cart.find()
-      
-      userModel.find({ role: "user" }).then(function (data) {
-        listuser = data;
-        listCart= arrCart
-        products.find().then(function (data) {
-          res.render("admin/index-admin", {
-            danhsach: data,
+      let query = {}
+      let time= new Date()
+      let start = req.query.startTime && req.query.startTime !="" ? moment(req.query.startTime, 'YYYY-MM-DD').startOf('day').toISOString() : moment().startOf('day').toISOString();
+      let end = req.query.endTime && req.query.endTime !=""  ? moment(req.query.endTime, 'YYYY-MM-DD').endOf('day').toISOString() : moment().endOf('day').toISOString();
+
+      query.date = {
+        $gte: moment(start).toDate(),
+        $lt: moment(end).toDate(),
+      }
+      let agg = [
+        { $match: {st:1,...query}},
+        { $unwind: '$cart' },
+        {
+          $group: {
+            _id: {
+              productId: '$cart.item._id',
+            },
+            nameProduct: { $first: '$cart.item.name' },
+            price: { $sum: { $multiply: ['$cart.price', '$cart.qty'] } }, // Tính tổng giá bằng giá nhân số lượng
+            quantity: { $sum: '$cart.qty' } // Tính tổng số lượng
+          }
+        },
+        { $sort: {quantity:-1}}
+      ];
+      console.log(JSON.stringify(Cart.aggregate(agg)));
+      // Thực hiện truy vấn MongoDB
+      Cart.aggregate(agg)
+        .exec()
+        .then(data => {
+          console.log("data",data);
+          
+        })
+        .catch(error => {
+          console.error(error);
+        });
+        userModel.find({ role: "user" }).then(function (data2) {
+          listuser = data2;
+          products.find().then(function (data3) {
+            res.render("admin/index-admin", {
+              danhsach: data3,
+            });
           });
         });
+      // let arrCart = await Cart.find()
+
+      // userModel.find({ role: "user" }).then(function (data) {
+      //   listuser = data;
+      //   listCart= arrCart
+      //   products.find().then(function (data) {
+      //     res.render("admin/index-admin", {
+      //       danhsach: data,
+      //     });
+      //   });
         
-      });
+      // });
     } else {
       products
         .find()
@@ -159,4 +204,91 @@ router.get("/logout", function (req, res, next) {
   }
 });
 
+// serch
+router.get("/timkiem",async function (req, res, next) {
+      let query = {}
+      let time= new Date()
+      let start = req.query.startTime && req.query.startTime !="" ? moment(req.query.startTime, 'YYYY-MM-DD').startOf('day').toISOString() : moment().startOf('day').toISOString();
+      let end = req.query.endTime && req.query.endTime !=""  ? moment(req.query.endTime, 'YYYY-MM-DD').endOf('day').toISOString() : moment().endOf('day').toISOString();
+
+      query.date = {
+        $gte: moment(start).toDate(),
+        $lt: moment(end).toDate(),
+      }
+      let agg = [
+        { $match: {st:1,...query}},
+        { $unwind: '$cart' },
+        {
+          $group: {
+            _id: {
+              productId: '$cart.item._id',
+            },
+            image: {$first: '$cart.item.image'},
+            nameProduct: { $first: '$cart.item.name' },
+            price: { $sum: { $multiply: ['$cart.price', '$cart.qty'] } }, // Tính tổng giá bằng giá nhân số lượng
+            quantity: { $sum: '$cart.qty' } // Tính tổng số lượng
+          }
+        },
+      ];
+      // Thực hiện truy vấn MongoDB
+      Cart.aggregate(agg)
+        .exec()
+        .then(data => {
+          res.json({data:data, status:200})
+        })
+        .catch(error => {
+          console.error(error);
+        });
+})
+router.get("/download", async (req, res) => {
+  try {
+    let query = {}
+      let time= new Date()
+      let start = req.query.startTime && req.query.startTime !="" ? moment(req.query.startTime, 'YYYY-MM-DD').startOf('day').toISOString() : moment().startOf('day').toISOString();
+      let end = req.query.endTime && req.query.endTime !=""  ? moment(req.query.endTime, 'YYYY-MM-DD').endOf('day').toISOString() : moment().endOf('day').toISOString();
+
+      query.date = {
+        $gte: moment(start).toDate(),
+        $lt: moment(end).toDate(),
+      }
+      let agg = [
+        { $match: {st:1,...query}},
+        { $unwind: '$cart' },
+        {
+          $group: {
+            _id: {
+              productId: '$cart.item._id',
+            },
+            image: {$first: '$cart.item.image'},
+            nameProduct: { $first: '$cart.item.name' },
+            price: { $sum: { $multiply: ['$cart.price', '$cart.qty'] } }, // Tính tổng giá bằng giá nhân số lượng
+            quantity: { $sum: '$cart.qty' } // Tính tổng số lượng
+          }
+        },
+      ];
+      // Thực hiện truy vấn MongoDB
+      Cart.aggregate(agg)
+        .exec()
+        .then(data => {
+          let excel = {
+            fileName: `Thongke_tu_${start}_den_${end}`,
+            title: `Thống kê báo cáo từ ${start} đến ${end}`,
+            titleHeadTable: [
+              { key: "nameProduct", value: "Tên sản phẩm" },
+              { key: "quantity", value: "Số lượng" },
+              { key: "price", value: "Thành tiền" },
+            ],
+            valueWidthColumn: [100,100,100],
+          };
+          exportExcel.exportExcel(data, excel, res, req);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    
+  } catch (error) {
+    console.error("Error:", error);
+    // Xử lý lỗi nếu có
+  }
+});
 module.exports = router;

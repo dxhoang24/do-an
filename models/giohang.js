@@ -4,7 +4,6 @@ function GioHang(oldCart) {
   this.TotalQty = oldCart.TotalQty || 0;
 
   this.add = function (id, item, type,productId) {
-    console.log("vào đây không");
     var giohang = this.items[productId];
     if (!giohang) {
       giohang = this.items[productId] = { item: item, qty: 0, price: 0,size:'',color:"", productId:productId };
@@ -15,9 +14,6 @@ function GioHang(oldCart) {
     giohang.price = giohang.qty * giohang.item.price;    
     this.TotalPrice += parseFloat(giohang.price);
     this.TotalQty++;
-    console.log("giỏ hàng 2",giohang);
-
-
   };
 
   this.convertArray = function () {
@@ -38,7 +34,6 @@ function GioHang(oldCart) {
   };
   this.updateCart2 = function (data) {
     let total = 0
-    console.log("vào đây không thế");
     data.forEach(element => {
       var giohang = this.items[element.productId]
       giohang.qty = element.qty;
