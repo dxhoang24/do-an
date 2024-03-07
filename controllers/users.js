@@ -7,6 +7,8 @@ var passport = require("passport");
 const userModel = require("../models/user");
 const products = require("../models/products");
 var Cart = require("../models/Cart.js");
+const exportExcel = require("../libs/export.js");
+
 
 /* GET home page. */
 router.get("/home",async function (req, res, next) {
@@ -41,9 +43,7 @@ router.get("/home",async function (req, res, next) {
       // Thực hiện truy vấn MongoDB
       Cart.aggregate(agg)
         .exec()
-        .then(data => {
-          console.log("data",data);
-          
+        .then(data => {          
         })
         .catch(error => {
           console.error(error);
@@ -240,10 +240,12 @@ router.get("/timkiem",async function (req, res, next) {
           console.error(error);
         });
 })
-router.get("/download", async (req, res) => {
+router.get("/downloadCart", async (req, res) => {
   try {
     let query = {}
       let time= new Date()
+      let startDate = req.query.startTime && req.query.startTime !="" ? moment(req.query.startTime, 'YYYY-MM-DD').startOf('day') : moment().startOf('day');
+      let endDate = req.query.endTime && req.query.endTime !=""  ? moment(req.query.endTime, 'YYYY-MM-DD').endOf('day') : moment().endOf('day');
       let start = req.query.startTime && req.query.startTime !="" ? moment(req.query.startTime, 'YYYY-MM-DD').startOf('day').toISOString() : moment().startOf('day').toISOString();
       let end = req.query.endTime && req.query.endTime !=""  ? moment(req.query.endTime, 'YYYY-MM-DD').endOf('day').toISOString() : moment().endOf('day').toISOString();
 
@@ -267,24 +269,21 @@ router.get("/download", async (req, res) => {
         },
       ];
       // Thực hiện truy vấn MongoDB
-      Cart.aggregate(agg)
-        .exec()
-        .then(data => {
+      return new Promise((resolve, reject) => {
+        Cart.aggregate(agg).then(data => {
           let excel = {
-            fileName: `Thongke_tu_${start}_den_${end}`,
-            title: `Thống kê báo cáo từ ${start} đến ${end}`,
+            fileName: `Thongke_tu_${req.query.startTime}_den_${req.query.endTime}`,
+            title: `THốNG KÊ DOANH SỐ BÁN HÀNG`,
             titleHeadTable: [
               { key: "nameProduct", value: "Tên sản phẩm" },
               { key: "quantity", value: "Số lượng" },
               { key: "price", value: "Thành tiền" },
             ],
-            valueWidthColumn: [100,100,100],
+            valueWidthColumn: [50,50,50],
           };
           exportExcel.exportExcel(data, excel, res, req);
         })
-        .catch(error => {
-          console.error(error);
-        });
+      })
     
   } catch (error) {
     console.error("Error:", error);

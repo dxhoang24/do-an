@@ -92,22 +92,21 @@
                     <!-- Pending Requests Card Example -->
 
                 </div>
-                <div class="row mb-4" style="display: flex; justify-content: space-between; margin-right: 30px;">
+                <div class="row mb-4" style="display: flex; justify-content: flex-end;margin-right: 30px;">
         
                         <div>
-
+                            <label class="form-control-label">Từ ngày</label>
                             <input type="date" class="form-control" name="startTime" id="startTime" placeholder="Ngày bắt đầu">
                         </div>
-                        <div>
+                        <div style="margin-left: 5px;">
+                            <label class="form-control-label">Đến ngày</label>
                             <input type="date" class="form-control" name="endTime" id="endTime" placeholder="Ngày kết thúc">
 
                         </div>
-                        <div>
-
+                        <div style="margin-top: 32px;margin-left: 5px;">
                             <button class="btn btn-primary" id="searchBtn" type="submit" >Lọc</button>
                         </div>
-                        <div>
-
+                        <div style="margin-top: 32px; margin-left: 5px;">
                             <button class="btn btn-primary" id="download" type="submit" >Xuất excel</button>
                         </div>
                 </div>
@@ -170,7 +169,7 @@
             });
             Highcharts.chart('container', {
                 title: {
-                    text: `Biểu đồ thống kê từ ${startTime} đến ${endTime}`
+                    text: `Biểu đồ thống kê từ ${startTime} đến ${endTime ? endTime :"..."}`
                 },
                 xAxis: {
                     categories: name
@@ -204,7 +203,7 @@
                     yAxis: 1
                 }]
             });
-            
+            calculateTotal(data.data)
             renderTable(data.data)
         })
         .catch(error => {
@@ -239,33 +238,25 @@
                 tableBody.appendChild(row);
             });
         }
+    function calculateTotal(data) {
+        let total = 0;
+        data.forEach((item) => {
+            total +=item.price
+        });
+        const doanhthu = document.getElementById('doanhthu');
+        doanhthu.innerHTML=`${total}`
+    }
 })
 document.getElementById('download').addEventListener('click', function() {
     // Lấy giá trị của các trường thời gian từ giao diện người dùng
-    let startTime = document.getElementById('startTime').value;
-    let endTime = document.getElementById('endTime').value;
-
-    // Gửi yêu cầu đến backend thông qua fetch
-    fetch(`/download?startTime=${startTime}&endTime=${endTime}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        })
-        .then(response => {
-            if (!response.ok) {
-            throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("data",data);
-        })
-        .catch(error => {
-            console.error('Error calling API:', error);
-    });
-
+        let startTime = document.getElementById('startTime').value;
+        let endTime = document.getElementById('endTime').value;
+        let url =  window.location.origin + `/downloadCart?startTime=${startTime}&endTime=${endTime}`
     
+        var link = document.createElement("a")
+        link.download = ''
+        link.href = url
+        link.click()
     })
 
 </script>
