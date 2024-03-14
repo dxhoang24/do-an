@@ -209,7 +209,7 @@
         .catch(error => {
             console.error('Error calling API:', error);
     });
-
+    })
     function renderTable(data) {
             const tableBody = document.getElementById('tableBody');
             const tableHeader = document.getElementById('tableHeader');
@@ -246,7 +246,7 @@
         const doanhthu = document.getElementById('doanhthu');
         doanhthu.innerHTML=`${total}`
     }
-})
+
 document.getElementById('download').addEventListener('click', function() {
     // Lấy giá trị của các trường thời gian từ giao diện người dùng
         let startTime = document.getElementById('startTime').value;

@@ -9,6 +9,9 @@ var schema = new Schema({
   email: { type: String, required: true },
   password: { type: String, required: true },
   name: { type: String, required: true },
+  phone: { type: Number, required: false },
+  sex: { type: Number, required: false },
+  address: { type: String, required: false },
   role: { type: String, required: true },
   lock: { type: Number, required: false },
 });

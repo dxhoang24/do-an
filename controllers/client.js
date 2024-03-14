@@ -17,7 +17,22 @@ client.get("/client", (req, res) => {
     });
   }
 });
-
+client.post("/edit-user", (req, res) => {
+  console.log("req",req.body);
+  userModel.updateOne(
+    {_id:req.body.id},
+    {
+      $set: req.body
+    },
+    function (err) {
+      if (err) {
+        res.redirect("/client", 500);
+      } else {
+        res.redirect("/client", 301);
+      }
+    }
+  );
+});
 client.get("/admin/clientadmin", (req, res) => {
   if (req.session.loggin) {
     user = req.user;
