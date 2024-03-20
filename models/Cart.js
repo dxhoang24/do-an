@@ -7,6 +7,7 @@ var Cart = new Schema(
     userID: { type: String, required: false },
     name: { type: String, required: false },
     address: { type: String, required: false },
+    email: { type: String, required: false },
     sdt: { type: String, required: false },
     msg: { type: String, required: false },
     cart: { type: Object, required: false },

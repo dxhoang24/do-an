@@ -59,11 +59,11 @@
                         <tr>
                           <td colspan="5">
                             <% if(cart.st==0){ %>
-                              <a href="/xacnhan/<%= cart._id%>">Đang chờ xử lý</a>
+                              <a href="/xacnhan/<%= cart._id%>" onClick="sendmail('success')">Đang chờ xử lý</a>
                               <%}else{ %>
                                 <span style="color: rgb(65, 204, 65);">Đã xác nhận</span>
                                 <%}%> 
-                              |<a href="/xoa/<%= cart._id %>">Xoá</a>
+                              |<a href="/xoa/<%= cart._id %>" onClick="sendmail('huy')">Xoá</a>
                           </td>
                         </tr>
                         <tr>
@@ -82,3 +82,31 @@
 
         </div>
   </body>
+
+  <script>
+    let data = JSON.parse(decodeURIComponent(`<%- encodeURIComponent(JSON.stringify(list)); %>`));
+    function sendmail(type) {
+        let noidung = document.getElementById("phanhoi").value
+        let data2 = {
+            email: data.email,
+            type: 'lienhe',
+            noidung: noidung
+        }
+        if(noidung ===''){
+            document.getElementById(`errorPhanhoi`).textContent = "Thông tin phản hồi không được bỏ trống !! ";
+        }else{
+            document.getElementById(`errorPhanhoi`).textContent = "";
+            fetch('/sendmail', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data2)
+            })
+            .then(response => response.json())
+            .catch(error => {
+                console.error('Error calling API:', error);
+            });
+        }
+  }
+</script>
