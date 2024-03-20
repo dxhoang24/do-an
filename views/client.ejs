@@ -2,7 +2,6 @@
 <link rel="stylesheet" href="css/body.css">
 <%- include("./layout/nav") %>
 
-
 <!-- Use any element to open the sidenav -->
 
 <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
@@ -24,14 +23,19 @@
           <p style="color: red">
             Email: <%= user.email %>
             <br />
+            Số điện thoại: <%= user.phone %>
+            <br />
+            Địa chỉ: <%= user.address %>
+            <br />
           </p>
          
-
+          <!-- modal xóa -->
           <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content" >
                 <div class="modal-header">
+                  <h4>Thông báo</h4>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -54,11 +58,72 @@
             </div>
           </div>
 
+          <!-- modal update -->
+          <div class="modal fade" id="exampleModalUpdate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content" >
+              <div class="modal-header">
+                <h4>Cập nhật thông tin</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <form class="form-signin" id="updateUser">
+                  <div class="modal-body">
+                  <div>
+                    <div>
+                      <div class="form-group">
+                        <input type="hidden" value="<%- user.id %>" name="id" class="form-control" placeholder="id" required>
+                      </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label class="form-control-label">Họ, tên:</label>
+                        </div>
+                        <div class="col-md-9 form-group">
+                          <input type="text" name="name" value="<%- user.name %>" class="form-control" placeholder="Họ và tên" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                          <label class="form-control-label">Số điện thoại</label>
+                      </div>
+                      <div class="col-md-9 form-group">
+                        <input type="number" value="<%- user.phone ?  user.phone : '' %>" name="phone" class="form-control" placeholder="Số điện thoại" >
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                          <label class="form-control-label">Địa chỉ</label>
+                      </div>
+                      <div class="col-md-9 form-group">
+                        <input type="text" value="<%- user.address ? user.address : '' %>" name="address" class="form-control" placeholder="Địa chỉ" >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
+                      Hủy
+                    </button>
+                  <button type="submit" class="btn btn-primary">
+                      Cập nhật
+                  </button>
+                </div>
+              </form>
+              
+            </div>
+          </div>
+        </div>
           <!-------update------->
 
           <a style="margin-top: 20px" href="/logout">
             <button type="button" class="btn btn-default">Đăng xuất</button>
           </a>
+          <button type="button" class="btn btn-default" data-toggle="modal" data-target="#exampleModalUpdate">
+            Cập nhật thông tin
+          </button>
           <button type="button" class="btn btn-default" data-toggle="modal" data-target="#exampleModal">
             Xóa tài khoản
           </button>
@@ -67,4 +132,38 @@
       </div>
     </div>
   </div>
- 
+  <script>
+    document.getElementById('updateUser').addEventListener('submit', function(event) {
+      event.preventDefault(); // Ngăn chặn gửi yêu cầu mặc định
+      const formData = new FormData(this); // Lấy dữ liệu từ biểu mẫu
+      const data = Object.fromEntries(formData.entries()); // Chuyển đổi FormData thành đối tượng JavaScript
+      fetch(`/edit-user`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+        })
+        .then(response =>{
+          console.log(response);
+          if(response.status==200){
+            Swal.fire({
+              title: 'Thành công',
+              text: 'Cập nhật thông tin thành công!',
+            }).then(() => {
+              window.location.reload();
+            });
+          }else{
+            Swal.fire({
+              title: 'Thành công',
+              text: 'Cập nhật thông tin thất bại!',
+            }).then(() => {
+              window.location.reload();
+            });
+          }
+        })
+        .catch(error => {
+            console.error('Error calling API:', error);
+      });
+    });
+  </script>
