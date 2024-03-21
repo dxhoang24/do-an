@@ -57,7 +57,7 @@
                       </tr>
                       <%})%>
                         <tr>
-                          <td colspan="5">
+                          <td colspan="7">
                             <% if(cart.st==0){ %>
                               <a href="/xacnhan/<%= cart._id%>" onClick="sendmail('success')">Đang chờ xử lý</a>
                               <%}else{ %>
@@ -67,7 +67,7 @@
                           </td>
                         </tr>
                         <tr>
-                          <td colspan="5">
+                          <td colspan="7">
                             <p><strong style="color:red">Tồng Tiền: </strong>
                               <%= total %>đ
                             </p>
@@ -84,11 +84,10 @@
   </body>
 
   <script>
-    let data = JSON.parse(decodeURIComponent(`<%- encodeURIComponent(JSON.stringify(list)); %>`));
     function sendmail(type) {
         let noidung = document.getElementById("phanhoi").value
         let data2 = {
-            email: data.email,
+            email: "",
             type: 'lienhe',
             noidung: noidung
         }
