@@ -40,7 +40,7 @@ product.get("/product", (req, res) => {
   if (req.session.loggin) {
     user = req.user;
 
-    let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
+    let perPage = 8; // số lượng sản phẩm xuất hiện trên 1 page
     let page = req.params.page || 1;
     cates.find().then(function (data) {
       item = data;
@@ -65,7 +65,7 @@ product.get("/product", (req, res) => {
   } else {
     user = null;
 
-    let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
+    let perPage = 8; // số lượng sản phẩm xuất hiện trên 1 page
     let page = req.params.page || 1;
     cates.find().then(function (data) {
       item = data;
@@ -93,7 +93,7 @@ product.get("/product/:page", (req, res) => {
   if (req.session.loggin) {
     user = req.user;
 
-    let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
+    let perPage = 8; // số lượng sản phẩm xuất hiện trên 1 page
     let page = req.params.page || 1;
     Promise.all([cates.find(), colors.find(), sizes.find(), providers.find()])
       .then(function (results) {
@@ -131,7 +131,7 @@ product.get("/product/:page", (req, res) => {
       });
   } else {
     user = null;
-    let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
+    let perPage = 8; // số lượng sản phẩm xuất hiện trên 1 page
     let page = req.params.page || 1;
     Promise.all([cates.find(), colors.find(), sizes.find(), providers.find()])
       .then(function (results) {
@@ -174,7 +174,7 @@ product.get("/admin/list-product", (req, res) => {
   if (req.session.loggin) {
     user = req.user;
     if (user.role == "admin") {
-      let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
+      let perPage = 8; // số lượng sản phẩm xuất hiện trên 1 page
       let page = req.params.page || 1;
       var message = req.flash("error");
 
@@ -224,7 +224,7 @@ product.get("/admin/list-product/:page", (req, res) => {
   if (req.session.loggin) {
     user = req.user;
     if (user.role == "admin") {
-      let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
+      let perPage = 8; // số lượng sản phẩm xuất hiện trên 1 page
       let page = req.params.page || 1;
       var message = req.flash("error");
       Promise.all([cates.find(), colors.find(), sizes.find(), providers.find()])
@@ -328,7 +328,7 @@ product.post("/insert", (req, res) => {
           res.render("admin/insert-product", { message: "Lỗi tải lên!!!" });
         } else {
           // res.redirect("/admin/list-product",);
-          let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
+          let perPage = 8; // số lượng sản phẩm xuất hiện trên 1 page
           let page = req.params.page || 1;
           Promise.all([
             cates.find(),
@@ -440,7 +440,7 @@ product.post("/edit-product", (req, res) => {
               if (err) {
                 res.redirect("/admin/edit-product");
               } else {
-                let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
+                let perPage = 8; // số lượng sản phẩm xuất hiện trên 1 page
                 let page = req.params.page || 1;
                 Promise.all([
                   cates.find(),
@@ -508,7 +508,7 @@ product.post("/edit-product", (req, res) => {
                 if (err) {
                   res.redirect("/admin/edit-product");
                 } else {
-                  let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
+                  let perPage = 8; // số lượng sản phẩm xuất hiện trên 1 page
                   let page = req.params.page || 1;
 
                   Promise.all([
@@ -571,7 +571,7 @@ product.get("/delete-product/:id", (req, res) => {
       if (err) {
         res.redirect("/admin/list-product");
       } else {
-        let perPage = 12; // số lượng sản phẩm xuất hiện trên 1 page
+        let perPage = 8; // số lượng sản phẩm xuất hiện trên 1 page
         let page = req.params.page || 1;
 
         products
@@ -615,7 +615,7 @@ product.post("/Search", (req, res) => {
             .find({
               name: name,
             })
-            .limit(12)
+            .limit(8)
             .then((data) => {
               res.render("admin/Search_product", {
                 danhsach: data,
@@ -650,7 +650,7 @@ product.post("/Search", (req, res) => {
             .find({
               name: name,
             })
-            .limit(12)
+            .limit(8)
             .then((data) => {
               res.render("user/Search_product", {
                 danhsach: data,
@@ -685,7 +685,7 @@ product.post("/Search", (req, res) => {
           .find({
             name: name,
           })
-          .limit(12)
+          .limit(8)
           .then((data) => {
             res.render("user/Search_product", {
               danhsach: data,

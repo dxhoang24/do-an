@@ -45,7 +45,7 @@ function importFile(job) {
         'name': 'Tên',
         'price': 'Giá',
         'quantity': 'Số lượng',
-        };
+    };
     dataExcel = {
         'name': '0',
         'price': '1',
