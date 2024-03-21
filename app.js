@@ -8,7 +8,8 @@ var passport = require('passport');
 require('mongoose-pagination');
 var flash = require('connect-flash');
 require('colors');
-
+const { jobImportExcel } = require('./import_excel.js');
+jobImportExcel();
 global._ = require('underscore');
 global._moment = require('moment');
 var swal = require('sweetalert2')
