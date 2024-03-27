@@ -3,7 +3,10 @@ var cart = express.Router();
 var GioHang = require("../models/giohang.js");
 var Cart = require("../models/Cart.js");
 var products = require("../models/products.js");
+const exportExcel = require("../libs/export.js");
 const { v4: uuidv4 } = require('uuid');
+const mongoose = require("mongoose");
+
 var countJson = function (json) {
   var count = 0;
   for (var id in json) {
@@ -129,6 +132,61 @@ cart.get("/list_order", (req, res) => {
     res.redirect("/");
   }
 });
+cart.get("/order/download/:id", (req, res) => {
+  let id = req.params.id;
+  let agg = [
+    { $match: {
+      _id: new mongoose.Types.ObjectId(id)
+    }},
+    { $lookup: {from: 'users', localField: 'userID', foreignField: '_id', as: 'users'}},
+    { $unwind: {path: '$users', preserveNullAndEmptyArrays: true } },
+    { $project: {
+      name: 1,
+      phone: "$sdt",
+      address: 1,
+      date: 1,
+      cart: 1
+    }}
+  ]
+  let allMount = 0;// tổng tiền
+  // Thực hiện truy vấn MongoDB
+  return new Promise((resolve, reject) => {
+    Cart.aggregate(agg).then(rs => {
+      let data = {};
+      data.name = rs[0] ? rs[0].name : '';
+      data.phone = rs[0] ? '0' + rs[0].phone : '';
+      data.address = rs[0] ? rs[0].address : '';
+      data.date = rs[0] && rs[0].date ? moment(rs[0].date).format('DD/MM/YYYY HH:mm:ss') : '';
+      data.cart = [];
+      rs[0].cart.forEach(item => {
+        allMount += ( item.qty || 0 ) * ( item.price || 0 )
+        data.cart.push({
+          name: item.item ? item.item.name : '',
+          size: item.size || '',
+          color: item.color || '',
+          price: item.price || 0,
+          quantity: item.qty || 0,
+          mount: (item.qty || 0) * (item.price || 0)
+        })
+      });
+      data.allMount = allMount;
+      let excel = {
+        fileName: `OrderDetail_${id}_${data.name}`,
+        title: `HÓA ĐƠN MUA HÀNG`,
+        titleHeadTable: [
+          { key: "name", value: "Tên sản phẩm" },
+          { key: "size", value: "Size" },
+          { key: "color", value: "Màu sắc" },
+          { key: "price", value: "Đơn giá" },
+          { key: "quantity", value: "Số lượng" },
+          { key: "mount", value: "Thành tiền" },
+        ],
+        valueWidthColumn: [50, 20, 30, 30, 30, 30],
+      };
+      exportExcel.exportExcelCart(data, excel, res, req);
+    })
+  })
+})
 cart.get("/view/:id", (req, res) => {
   var id = req.params.id;
   Cart.findById(id).then(function (data) {

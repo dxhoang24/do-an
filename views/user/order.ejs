@@ -8,7 +8,7 @@
 <!------------------->
 <div class="container">
 
-  <h3>Mua hàng hàng</h3>
+  <h3>Mua hàng</h3>
   <hr>
   <div class="col-sm-8">
     <form action="/menu" method="POST">
@@ -17,7 +17,7 @@
       <label>Địa chỉ: <p style="color: red;float: right;"> *</p></label>
       <input type="text" style="margin-left: 93px; width: 280px;"value="<%- user.address %>" id="address" name="address" class="dathang"/><br><br>
       <label>Số điện thoại:  <p style="color: red;float: right;"> *</p> </label>
-      <input type="number" style="margin-left: 55px; width: 280px;" value="<%- user.phone %>" id="sdt" name="sdt" class="dathang" /><br><br>
+      <input type="number" style="margin-left: 55px; width: 280px;" value="<%- user.phone %>" id="phone" name="phone" class="dathang" /><br><br>
       <label>Ghi chú: <p style="color: red;float: right;"> *</p></label>
       <textarea class="dathang" style="margin-left: 90px;" rows="5" cols="32" name="msg" id="msg"></textarea><br><br>
       <button style="margin-left: 160px;" class="btn btn-primary" type="submit">Gửi</button>
