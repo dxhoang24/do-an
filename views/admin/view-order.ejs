@@ -16,6 +16,10 @@
             <h1 class="heading1"><span class="maintext"> </span><span class="subtext"> Chi tiết mua hàng</span></h1>
             <hr>
             <a href="/list_order">Quay lại</a>
+            <div style="margin-top: 32px; margin-left: 5px;">
+              <button class="btn btn-primary" id="download" value="<%- cart.id%>" type="submit" >Xuất excel</button>
+            </div>
+            <!-- <a href="/order/download?id=<%cart.id%>">Download</a> -->
             <!-- Cart-->
             <div class="cart-info">
               <table class="table table-striped table-bordered">
@@ -108,4 +112,15 @@
             });
         }
   }
+  document.getElementById('download').addEventListener('click', function() {
+    // Lấy giá trị của các trường thời gian từ giao diện người dùng
+        let id = document.getElementById('download').value;
+        console.log('id', id);
+        let url =  window.location.origin + `/order/download/${id}`
+    
+        var link = document.createElement("a")
+        link.download = ''
+        link.href = url
+        link.click()
+    })
 </script>
