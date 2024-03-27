@@ -1,228 +1,246 @@
-<%- include("../layout/head") %>
-<%
-    function calculateTotal(data) {
-        let total = 0;
-        data.forEach((item) => {
-            total +=item.price
-        });
-    
-        return total
-    }
-%>
+<%- include("../layout/head") %> <% function calculateTotal(data) { let total=0;
+data.forEach((item)=> { total +=item.price }); return total } %>
 
-    <link rel="stylesheet" href="/css/body.css">
+<link rel="stylesheet" href="/css/body.css" />
 
-    <body>
-        <div class="aside" style="border: none;">
-            <%- include("../layout/aside_admin") %>
-        </div>
-        <div class="content">
-            <%- include("../layout/nav_admin") %>
-                <!-- <div class="page-header text-center">
+<body>
+  <div class="aside" style="border: none">
+    <%- include("../layout/aside_admin") %>
+  </div>
+  <div class="content">
+    <%- include("../layout/nav_admin") %>
+    <!-- <div class="page-header text-center">
         <h1><span class="fa fa-anchor"></span> Thông tin tài khoản</h1>
     </div> -->
 
-                <div class="d-sm-flex align-items-center justify-content-between mt-2 mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Thống kê</h1>
+    <div class="d-sm-flex align-items-center justify-content-between mt-2 mb-4">
+      <h1 class="h3 mb-0 text-gray-800">Thống kê</h1>
+    </div>
+    <div class="row">
+      <div class="col-xl-4 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div
+                  class="text-xs font-weight-bold text-primary text-uppercase mb-1"
+                >
+                  Doanh thu
                 </div>
-                <div class="row">
-                    <div class="col-xl-4 col-md-6 mb-4">
-                        <div class="card border-left-primary shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                            Doanh thu</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            <div id="doanhthu"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4 col-md-6 mb-4">
-                        <div class="card border-left-success shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                            Sản phẩm</div>
-
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            <%= danhsach.length %>
-                                        </div>
-
-
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fa-solid fa-shirt fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4 col-md-6 mb-4">
-                        <div class="card border-left-info shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Khách hàng
-                                        </div>
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col-auto">
-                                                <%= listuser.length %>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fa-solid fa-user  fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Pending Requests Card Example -->
-
+                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                  <div id="doanhthu"></div>
                 </div>
-                <div class="row mb-4" style="display: flex; justify-content: flex-end;margin-right: 30px;">
-        
-                        <div>
-                            <label class="form-control-label">Từ ngày</label>
-                            <input type="date" class="form-control" name="startTime" id="startTime" placeholder="Ngày bắt đầu">
-                        </div>
-                        <div style="margin-left: 5px;">
-                            <label class="form-control-label">Đến ngày</label>
-                            <input type="date" class="form-control" name="endTime" id="endTime" placeholder="Ngày kết thúc">
-
-                        </div>
-                        <div style="margin-top: 32px;margin-left: 5px;">
-                            <button class="btn btn-primary" id="searchBtn" type="submit" >Lọc</button>
-                        </div>
-                        <div style="margin-top: 32px; margin-left: 5px;">
-                            <button class="btn btn-primary" id="download" type="submit" >Xuất excel</button>
-                        </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12" id="container" style="min-width: 310px; height: 400px"></div>
-                </div>
-                <div class="row">
-                        <table>
-                            <thead class="table table-bordered" id="tableHeader">
-                                
-                            </thead>
-                            <tbody id="tableBody">
-
-                            </tbody>
-                        </table>
-                </div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
         </div>
-    </body>
+      </div>
+
+      <div class="col-xl-4 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div
+                  class="text-xs font-weight-bold text-success text-uppercase mb-1"
+                >
+                  Sản phẩm
+                </div>
+
+                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                  <%= danhsach.length %>
+                </div>
+              </div>
+              <div class="col-auto">
+                <i class="fa-solid fa-shirt fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-4 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div
+                  class="text-xs font-weight-bold text-info text-uppercase mb-1"
+                >
+                  Khách hàng
+                </div>
+                <div class="row no-gutters align-items-center">
+                  <div class="col-auto"><%= listuser.length %></div>
+                </div>
+              </div>
+              <div class="col-auto">
+                <i class="fa-solid fa-user fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pending Requests Card Example -->
+    </div>
+    <div
+      class="row mb-4"
+      style="display: flex; justify-content: flex-end; margin-right: 30px"
+    >
+      <div>
+        <label class="form-control-label">Từ ngày</label>
+        <input
+          type="date"
+          class="form-control"
+          name="startTime"
+          id="startTime"
+          placeholder="Ngày bắt đầu"
+        />
+      </div>
+      <div style="margin-left: 5px">
+        <label class="form-control-label">Đến ngày</label>
+        <input
+          type="date"
+          class="form-control"
+          name="endTime"
+          id="endTime"
+          placeholder="Ngày kết thúc"
+        />
+      </div>
+      <div style="margin-top: 32px; margin-left: 5px">
+        <button class="btn btn-primary" id="searchBtn" type="submit">
+          Lọc
+        </button>
+      </div>
+      <div style="margin-top: 32px; margin-left: 5px">
+        <button class="btn btn-primary" id="download" type="submit">
+          Xuất excel
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div
+        class="col-md-12"
+        id="container"
+        style="min-width: 310px; height: 400px"
+      ></div>
+    </div>
+    <div class="row">
+      <table>
+        <thead class="table table-bordered" id="tableHeader"></thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</body>
 
 <script>
-    document.getElementById('searchBtn').addEventListener('click', function() {
+  document.getElementById("searchBtn").addEventListener("click", function () {
     // Lấy giá trị của các trường thời gian từ giao diện người dùng
-    let startTime = document.getElementById('startTime').value;
-    let endTime = document.getElementById('endTime').value;
+    let startTime = document.getElementById("startTime").value;
+    let endTime = document.getElementById("endTime").value;
 
     // Gửi yêu cầu đến backend thông qua fetch
     fetch(`/timkiem?startTime=${startTime}&endTime=${endTime}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        })
-        .then(response => {
-            if (!response.ok) {
-            throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("data",data);
-            var name = [];
-
-            data.data.forEach(function(item) {
-                name.push(item.nameProduct);
-                
-            });
-            var columnData = [];
-            data.data.forEach(function(item) {
-                columnData.push({
-                    name: item.nameProduct,
-                    y: item.quantity
-                });
-            });
-            var lineData = [];
-            data.data.forEach(function(item) {
-                lineData.push({
-                    name: item.nameProduct,
-                    y: item.price
-                });
-            });
-            Highcharts.chart('container', {
-                title: {
-                    text: `Biểu đồ thống kê từ ${startTime} đến ${endTime ? endTime :"..."}`
-                },
-                xAxis: {
-                    categories: name
-                },
-                yAxis: [{
-                    // Primary yAxis
-                    title: {
-                        text: 'Số lượng',
-                        style: {
-                            color: Highcharts.getOptions().colors[0]
-                        }
-                    }
-                }, {
-                    // Secondary yAxis
-                    title: {
-                        text: 'Doanh thu',
-                        style: {
-                            color: Highcharts.getOptions().colors[1]
-                        }
-                    },
-                    opposite: true
-                }],
-                series: [{
-                    type: 'column',
-                    name: 'Số lượng',
-                    data: columnData
-                }, {
-                    type: 'spline',
-                    name: 'Doanh thu',
-                    data: lineData,
-                    yAxis: 1
-                }]
-            });
-            calculateTotal(data.data)
-            renderTable(data.data)
-        })
-        .catch(error => {
-            console.error('Error calling API:', error);
-    });
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
-    function renderTable(data) {
-            const tableBody = document.getElementById('tableBody');
-            const tableHeader = document.getElementById('tableHeader');
-            tableHeader.innerHTML = `
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("data", data);
+        var name = [];
+
+        data.data.forEach(function (item) {
+          name.push(item.nameProduct);
+        });
+        var columnData = [];
+        data.data.forEach(function (item) {
+          columnData.push({
+            name: item.nameProduct,
+            y: item.quantity,
+          });
+        });
+        var lineData = [];
+        data.data.forEach(function (item) {
+          lineData.push({
+            name: item.nameProduct,
+            y: item.price,
+          });
+        });
+        Highcharts.chart("container", {
+          title: {
+            text: `Biểu đồ thống kê từ ${startTime} đến ${
+              endTime ? endTime : "..."
+            }`,
+          },
+          xAxis: {
+            categories: name,
+          },
+          yAxis: [
+            {
+              // Primary yAxis
+              title: {
+                text: "Số lượng",
+                style: {
+                  color: Highcharts.getOptions().colors[0],
+                },
+              },
+            },
+            {
+              // Secondary yAxis
+              title: {
+                text: "Doanh thu",
+                style: {
+                  color: Highcharts.getOptions().colors[1],
+                },
+              },
+              opposite: true,
+            },
+          ],
+          series: [
+            {
+              type: "column",
+              name: "Số lượng",
+              data: columnData,
+            },
+            {
+              type: "spline",
+              name: "Doanh thu",
+              data: lineData,
+              yAxis: 1,
+            },
+          ],
+        });
+        calculateTotal(data.data);
+        renderTable(data.data);
+      })
+      .catch((error) => {
+        console.error("Error calling API:", error);
+      });
+  });
+  function renderTable(data) {
+    const tableBody = document.getElementById("tableBody");
+    const tableHeader = document.getElementById("tableHeader");
+    tableHeader.innerHTML = `
                                 <th class="align-middle text-center">Tên sản phẩm</th>
                                 <th class="align-middle text-center">Hình ảnh</th>
                                 <th class="align-middle text-center">Số lượng</th>
                                 <th class="align-middle text-center">Thành tiền</th>
-            `
-            tableBody.innerHTML = ''; // Xóa nội dung cũ của bảng
-            data.forEach(item => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
+            `;
+    tableBody.innerHTML = ""; // Xóa nội dung cũ của bảng
+    data.forEach((item) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
                     <td class="align-middle text-center">${item.nameProduct}</td>
                     <td class="align-middle text-center">
                         <img
@@ -235,28 +253,29 @@
                     <td class="align-middle text-center">${item.quantity}</td>
                     <td class="align-middle text-center">${item.price}</td>
                 `;
-                tableBody.appendChild(row);
-            });
-        }
-    function calculateTotal(data) {
-        let total = 0;
-        data.forEach((item) => {
-            total +=item.price
-        });
-        const doanhthu = document.getElementById('doanhthu');
-        doanhthu.innerHTML=`${total}`
-    }
+      tableBody.appendChild(row);
+    });
+  }
+  function calculateTotal(data) {
+    let total = 0;
+    data.forEach((item) => {
+      total += item.price;
+    });
+    const doanhthu = document.getElementById("doanhthu");
+    doanhthu.innerHTML = `${total}`;
+  }
 
-document.getElementById('download').addEventListener('click', function() {
+  document.getElementById("download").addEventListener("click", function () {
     // Lấy giá trị của các trường thời gian từ giao diện người dùng
-        let startTime = document.getElementById('startTime').value;
-        let endTime = document.getElementById('endTime').value;
-        let url =  window.location.origin + `/downloadCart?startTime=${startTime}&endTime=${endTime}`
-    
-        var link = document.createElement("a")
-        link.download = ''
-        link.href = url
-        link.click()
-    })
+    let startTime = document.getElementById("startTime").value;
+    let endTime = document.getElementById("endTime").value;
+    let url =
+      window.location.origin +
+      `/downloadCart?startTime=${startTime}&endTime=${endTime}`;
 
+    var link = document.createElement("a");
+    link.download = "";
+    link.href = url;
+    link.click();
+  });
 </script>
